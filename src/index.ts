@@ -1,3 +1,6 @@
+import * as http from 'http'
+import * as https from 'https'
+
 import axios from 'axios'
 import {
   FetchInventory,
@@ -21,11 +24,22 @@ import {
 
 export class Waxpeer {
   private api: string
+  private httpAgent: http.Agent;
+  private httpsAgent: http.Agent;
   public baseUrl = 'https://api.waxpeer.com'
   public version = 'v1'
-  constructor(api: string, baseUrl?: string) {
+  constructor(api: string, localAddress?: string, family?: number, baseUrl?: string ) {
     this.api = api
     if (baseUrl) this.baseUrl = baseUrl
+
+    let options = {};
+
+    if( localAddress ) {
+      options = { localAddress, family };
+    }
+
+    this.httpAgent = new http.Agent(options)
+    this.httpsAgent = new https.Agent(options)
   }
   public async sleep(timer: number) {
     await new Promise((res) => setTimeout(res, timer))
@@ -258,7 +272,7 @@ export class Waxpeer {
   public async post(url: string, body: any): Promise<any> {
     let { baseUrl, api, version } = this
     let newUrl = `${baseUrl}/${version}/${url}?api=${api}`
-    return (await axios.post(newUrl, body)).data
+    return (await axios.post(newUrl, body, { httpAgent: this.httpAgent, httpsAgent: this.httpsAgent })).data
   }
 
   public async get(url: string, token?: string): Promise<any> {
@@ -266,7 +280,7 @@ export class Waxpeer {
     let newUrl = `${baseUrl}/${version}/${url}?api=${api}`
     if (token) newUrl += `&${token}`
     try {
-      return (await axios.get(newUrl)).data
+      return (await axios.get(newUrl, { httpAgent: this.httpAgent, httpsAgent: this.httpsAgent })).data
     } catch (e) {
       throw e
     }

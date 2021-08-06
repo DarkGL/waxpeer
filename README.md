@@ -1,5 +1,3 @@
-![WaxPeer](https://pbs.twimg.com/profile_banners/1146046554563895296/1562074133/1080x360)
-
 [WaxPeer](https://waxpeer.com) API wrapper for Node.js
 
 Full API documentation [here](https://api.waxpeer.com/docs)
