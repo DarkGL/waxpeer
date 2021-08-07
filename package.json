@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/skylight-ity/waxpeer.git"
+    "url": "git+https://github.com/DarkGL/waxpeer.git"
   },
   "keywords": [
     "waxpeer",
@@ -25,9 +25,9 @@
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/skylight-ity/waxpeer/issues"
+    "url": "https://github.com/DarkGL/waxpeer/issues"
   },
-  "homepage": "https://github.com/skylight-ity/waxpeer#readme",
+  "homepage": "https://github.com/DarkGL/waxpeer#readme",
   "devDependencies": {
     "ts-node": "^8.3.0",
     "tsc": "^1.20150623.0",
