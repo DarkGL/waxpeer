@@ -341,7 +341,7 @@ export class Waxpeer {
    *   "removed": 0
    * }
    */
-  public editItems(items: IEditItemsReq[]): Promise<IResponseEdit> {
+  public editItems(items: IEditItemsReq[], localAddress?: string, family?: number): Promise<IResponseEdit> {
     return this.post(`edit-items`, {
       items,
     })
@@ -365,7 +365,7 @@ export class Waxpeer {
    *   ]
    * }
    */
-  public listItemsSteam(items: ListedItem[]): Promise<ListItems> {
+  public listItemsSteam(items: ListedItem[], localAddress?: string, family?: number): Promise<ListItems> {
     return this.post('list-items-steam', {
       items,
     })
@@ -545,9 +545,21 @@ export class Waxpeer {
     return this.get(`remove-items`, removeId.map((i) => `id=${i}`).join('&'))
   }
 
-  public async post(url: string, body: any): Promise<any> {
+  public async post(url: string, body: any, localAddress?: string, family?: number): Promise<any> {
     let { baseUrl, api, version } = this
     let newUrl = `${baseUrl}/${version}/${url}?api=${api}`
+
+    if( localAddress && family ) {
+      let options = {};
+
+      options = { localAddress, family };
+      
+      const overrideHttpAgent = new http.Agent(options)
+      const overrideHttpsAgent = new https.Agent(options)
+
+      return (await axios.post(newUrl, body, { httpAgent: overrideHttpAgent, httpsAgent: overrideHttpsAgent })).data
+    }
+
     return (await axios.post(newUrl, body, { httpAgent: this.httpAgent, httpsAgent: this.httpsAgent })).data
   }
 
