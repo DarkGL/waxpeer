@@ -1,12 +1,37 @@
-import { FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, ICheckLink, IEditItemsReq, IListedItem, IPrices, IResponseEdit, ISetMyKeys, ISteamInfoItem, IUser, ListedItem, ListItems, TradesStatus } from './types/waxpeer';
-export declare class Waxpeer {
-    private api;
-    private httpAgent;
-    private httpsAgent;
-    baseUrl: string;
-    version: string;
-    constructor(api: string, localAddress?: string, family?: number, baseUrl?: string);
-    sleep(timer: number): Promise<void>;
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Waxpeer = void 0;
+const http = require("http");
+const https = require("https");
+const axios_1 = require("axios");
+class Waxpeer {
+    constructor(api, localAddress, family, baseUrl) {
+        this.baseUrl = 'https://api.waxpeer.com';
+        this.version = 'v1';
+        this.api = api;
+        if (baseUrl)
+            this.baseUrl = baseUrl;
+        let options = {};
+        if (localAddress) {
+            options = { localAddress, family };
+        }
+        this.httpAgent = new http.Agent(options);
+        this.httpsAgent = new https.Agent(options);
+    }
+    sleep(timer) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield new Promise((res) => setTimeout(res, timer));
+        });
+    }
     /**
      * Buy item using name and send to specific tradelink - `buy-one-p2p-name`
      *
@@ -23,7 +48,9 @@ export declare class Waxpeer {
      *   "msg": "buy_csgo"
      * }
      */
-    buyItemWithName(name: string, price: number, token: string, partner: string, project_id?: string): Promise<IBuy>;
+    buyItemWithName(name, price, token, partner, project_id) {
+        return this.get('buy-one-p2p-name', `name=${encodeURIComponent(name)}&price=${price}&token=${token}&partner=${partner}${project_id ? `&project_id=${project_id}` : ''}`);
+    }
     /**
      * Buy item using `item_id` and send to specific tradelink - `/buy-one-p2p`
      *
@@ -40,7 +67,9 @@ export declare class Waxpeer {
      *   "msg": "buy_csgo"
      * }
      */
-    buyItemWithId(item_id: number, price: number, token: string, partner: string, project_id?: string): Promise<IBuy>;
+    buyItemWithId(item_id, price, token, partner, project_id) {
+        return this.get('buy-one-p2p', `item_id=${item_id}&price=${price}&token=${token}&partner=${partner}${project_id ? `&project_id=${project_id}` : ''}`);
+    }
     /**
      * Check many steam trades - `/check-many-steam`
      *
@@ -66,7 +95,14 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    tradeRequestStatus(ids: number | number[] | string | string[]): Promise<TradesStatus>;
+    tradeRequestStatus(ids) {
+        let id = [];
+        if (typeof ids !== 'object')
+            id = [ids];
+        else
+            id = [...ids];
+        return this.get('check-many-steam', id.map((i) => `id=${i}`).join('&'));
+    }
     /**
      * Check many steam trades - `check-many-project-id
      *
@@ -92,7 +128,14 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    customTradeRequest(ids: number | number[] | string | string[]): Promise<TradesStatus>;
+    customTradeRequest(ids) {
+        let id = [];
+        if (typeof ids !== 'object')
+            id = [ids];
+        else
+            id = [...ids];
+        return this.get('check-many-project-id', id.map((i) => `id=${i}`).join('&'));
+    }
     /**
      * Connect steam api and waxpeer api - `/set-my-steamapi`
      *
@@ -104,7 +147,9 @@ export declare class Waxpeer {
      *   "msg": "string"
      * }
      */
-    setMyKeys(steam_api: string): Promise<ISetMyKeys>;
+    setMyKeys(steam_api) {
+        return this.get('set-my-steamapi', `steam_api=${steam_api}&api=${this.api}`);
+    }
     /**
      * Fetches items based on the game you pass as a query - `/get-items-list`
      *
@@ -130,7 +175,9 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    getItemsList(skip?: number, limit?: number, game?: string, discount?: number, min_price?: number, max_price?: number, sort?: string, minified?: number): Promise<GetItems>;
+    getItemsList(skip = 0, limit = 50, game = 'csgo', discount = 0, min_price = 0, max_price = 10000000, sort = 'desc', minified = 0) {
+        return this.get('get-items-list', `game=${game}&skip=${skip}&limit=${limit}&discount=${discount}&min_price=${min_price}&max_price=${max_price}&sort=${sort}&minified=${minified}`);
+    }
     /**
      * Fetches your steam inventory make sure your steamid is connected on waxpeer - `/fetch-my-inventory`.
      * Call this endpoint before calling {@link getMyInventory|getMyInventory()} (`/get-my-inventory`)
@@ -142,16 +189,18 @@ export declare class Waxpeer {
      *   "msg": "Inventory is closed"
      * }
      */
-    fetchInventory(): Promise<FetchInventory>;
+    fetchInventory() {
+        return this.get('fetch-my-inventory');
+    }
     /**
      * Fetch steam average price and other steam related info about all items - `/get-steam-items`
      *
      * @param game
      */
-    getSteamItems(game?: string): Promise<{
-        success: boolean;
-        items: ISteamInfoItem[];
-    }>;
+    getSteamItems(game = 'csgo') {
+        let gameId = game === 'csgo' ? 730 : 570;
+        return this.get('get-steam-items', `game=${gameId}`);
+    }
     /**
      * Get min price, name, max_price, average price for all items - `/prices`
      *
@@ -174,13 +223,17 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    getPrices(game?: string, min_price?: number, max_price?: number, search?: string): Promise<IPrices>;
+    getPrices(game = 'csgo', min_price, max_price, search) {
+        return this.get(`prices`, `game=${game}&${min_price ? `min_price=${min_price}` : ''}${max_price ? `max_price=${max_price}` : ''}${search ? encodeURIComponent(search) : ''}`);
+    }
     /**
      * It will validate tradelink and also cache it on waxpeer side so your purchase will be made instantly - `/check-tradelink`
      *
      * @param tradelink Full tradelink that you want to validate
      */
-    validateTradeLink(tradelink: string): Promise<ICheckLink>;
+    validateTradeLink(tradelink) {
+        return this.post(`check-tradelink`, { tradelink });
+    }
     /**
      * Check weather items are available by item_id max 50 items - `/check-availability`
      *
@@ -200,10 +253,10 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    checkItemAvailability(item_id: string | number | string[] | number[]): Promise<{
-        success: boolean;
-        data: IAvailable[];
-    }>;
+    checkItemAvailability(item_id) {
+        let ids = typeof item_id === 'object' ? item_id : [item_id];
+        return this.get(`check-availability`, ids.map((i) => `item_id=${i}`).join('&'));
+    }
     /**
      * Edit multiple items or set price to 0 to remove - `/edit-items`
      *
@@ -227,7 +280,11 @@ export declare class Waxpeer {
      *   "removed": 0
      * }
      */
-    editItems(items: IEditItemsReq[], localAddress?: string, family?: number): Promise<IResponseEdit>;
+    editItems(items, localAddress, family) {
+        return this.post(`edit-items`, {
+            items,
+        });
+    }
     /**
      * List steam items from inventory - `/list-items-steam`
      *
@@ -246,7 +303,11 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    listItemsSteam(items: ListedItem[], localAddress?: string, family?: number): Promise<ListItems>;
+    listItemsSteam(items, localAddress, family) {
+        return this.post('list-items-steam', {
+            items,
+        });
+    }
     /**
      * Get listed steam items - `/list-items-steam`
      *
@@ -270,10 +331,9 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    myListedItems(game?: string): Promise<{
-        success: boolean;
-        items: IListedItem[];
-    }>;
+    myListedItems(game = 'csgo') {
+        return this.get('list-items-steam', `game=${game ? game : 'csgo'}`);
+    }
     /**
      * Get items that you can list for sale - `/get-my-inventory`
      *
@@ -300,7 +360,10 @@ export declare class Waxpeer {
      *   "msg": "noSteamid"
      * }
      */
-    getMyInventory(skip?: number, game?: string): Promise<GetMySteamInv>;
+    getMyInventory(skip = 0, game = 'csgo') {
+        let gameId = game === 'csgo' ? 730 : game === 'dota2' ? 570 : 440;
+        return this.get('get-my-inventory', `game=${gameId}&skip=${skip}`);
+    }
     /**
      * Search multiple items by name - `/search-items-by-name`
      *
@@ -320,7 +383,11 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    searchItems(names: string[] | string): Promise<GetItems>;
+    searchItems(names) {
+        let nameSearch = typeof names === 'object' ? names : [names];
+        let searchNames = nameSearch.map((i) => `names=${encodeURIComponent(i)}`).join('&');
+        return this.get('search-items-by-name', searchNames);
+    }
     /**
      * Get recent purchases - `/history`
      *
@@ -349,7 +416,9 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    myPurchases(skip?: number, partner?: string, token?: string): Promise<IBuyMyHistory>;
+    myPurchases(skip = 0, partner, token) {
+        return this.get(`history`, `skip=${skip}${partner ? `&partner=${partner}` : ''}${token ? `&token=${token}` : ''}`);
+    }
     /**
      * Get Profile data - `/user`
      *
@@ -373,7 +442,9 @@ export declare class Waxpeer {
      *   }
      * }
      */
-    getProfile(): Promise<IUser>;
+    getProfile() {
+        return this.get('user');
+    }
     /**
      * Removes all listed items - `/remove-all`
      *
@@ -385,7 +456,9 @@ export declare class Waxpeer {
      *   "count": 0
      * }
      */
-    removeAll(): Promise<any>;
+    removeAll() {
+        return this.get(`remove-all`);
+    }
     /**
      * Remove specified items - `/remove-items`
      *
@@ -397,11 +470,37 @@ export declare class Waxpeer {
      *   "count": 1
      * }
      */
-    removeItems(ids: number | number[] | string | string[]): Promise<{
-        success: boolean;
-        count: number;
-        removed: number[];
-    }>;
-    post(url: string, body: any, localAddress?: string, family?: number): Promise<any>;
-    get(url: string, token?: string): Promise<any>;
+    removeItems(ids) {
+        let removeId = typeof ids === 'object' ? ids : [ids];
+        return this.get(`remove-items`, removeId.map((i) => `id=${i}`).join('&'));
+    }
+    post(url, body, localAddress, family) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let { baseUrl, api, version } = this;
+            let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
+            if (localAddress && family) {
+                let options = {};
+                options = { localAddress, family };
+                const overrideHttpAgent = new http.Agent(options);
+                const overrideHttpsAgent = new https.Agent(options);
+                return (yield axios_1.default.post(newUrl, body, { httpAgent: overrideHttpAgent, httpsAgent: overrideHttpsAgent })).data;
+            }
+            return (yield axios_1.default.post(newUrl, body, { httpAgent: this.httpAgent, httpsAgent: this.httpsAgent })).data;
+        });
+    }
+    get(url, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let { baseUrl, api, version } = this;
+            let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
+            if (token)
+                newUrl += `&${token}`;
+            try {
+                return (yield axios_1.default.get(newUrl, { httpAgent: this.httpAgent, httpsAgent: this.httpsAgent })).data;
+            }
+            catch (e) {
+                throw e;
+            }
+        });
+    }
 }
+exports.Waxpeer = Waxpeer;
