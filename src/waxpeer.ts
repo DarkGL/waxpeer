@@ -1,3 +1,5 @@
+import http from 'http';
+import https from 'https';
 import axios from 'axios';
 import qs from 'qs';
 import {
@@ -590,7 +592,7 @@ export class Waxpeer {
    *   "removed": 0
    * }
    */
-  public editItems(items: IEditItemsReq[], game: keyof typeof EGameId = 'csgo'): Promise<IResponseEdit> {
+  public editItems(items: IEditItemsReq[], game: keyof typeof EGameId = 'csgo', localAddress?: string, family?: number): Promise<IResponseEdit> {
     return this.post(
       `edit-items`,
       {
@@ -1281,11 +1283,30 @@ export class Waxpeer {
     return this.post(`merchant/deposits`, null, qs.stringify({ merchant, steam_id, tx_id }));
   }
 
-  public async post(url: string, body: any, token?: string): Promise<any> {
+  public async post(url: string, body: any, token?: string, localAddress?: string, family?: number): Promise<any> {
     let { baseUrl, api, version } = this;
     let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
     if (token) newUrl += `&${token}`;
     try {
+      if( localAddress && family ) {
+        let options = {};
+  
+        options = { localAddress, family };
+  
+        const overrideHttpAgent = new http.Agent(options)
+        const overrideHttpsAgent = new https.Agent(options)
+
+        return (
+          await axios.post(newUrl, body, {
+            headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
+            cancelToken: this.newAxiosCancelationSource(60000),
+            timeout: 60000,
+            httpAgent: overrideHttpAgent,
+            httpsAgent: overrideHttpsAgent
+          })
+        ).data;
+      }
+
       return (
         await axios.post(newUrl, body, {
           headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
