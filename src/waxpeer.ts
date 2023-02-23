@@ -1291,7 +1291,7 @@ export class Waxpeer {
       if( this.localAddress ) {
         let options = {};
   
-        options = { localAddress: this.localAddress, family };
+        options = { localAddress: this.localAddress };
   
         const overrideHttpAgent = new http.Agent(options);
         const overrideHttpsAgent = new https.Agent(options);
