@@ -11,7 +11,7 @@ export class TradeWebsocket extends EventEmitter {
     int: null,
   };
   public socketOpen = false;
-  constructor(apiKey: string, steamid: string, tradelink: string) {
+  constructor(apiKey: string, steamid: string, tradelink: string, private readonly localAddress: string) {
     super();
     this.apiKey = apiKey;
     this.steamid = steamid;
@@ -21,7 +21,7 @@ export class TradeWebsocket extends EventEmitter {
   async connectWss() {
     if (this.w && this.w.ws) this.w.ws.close();
     let t = (this.w.tries + 1) * 1e3;
-    this.w.ws = new WebSocket('wss://wssex.waxpeer.com');
+    this.w.ws = new WebSocket('wss://wssex.waxpeer.com', undefined, { localAddress: this.localAddress });
     this.w.ws.on('error', (e) => {
       console.log('TradeWebsocket error', e);
       this.w.ws.close();

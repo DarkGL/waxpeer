@@ -1,3 +1,4 @@
+import http from 'http';
 import EventEmitter from 'events';
 import io from 'socket.io-client';
 import { WebsiteSocketSubEvents } from '../types/sockets';
@@ -6,21 +7,44 @@ export class WebsiteWebsocket extends EventEmitter {
   private apiKey: string;
   public socketOpen = false;
   public subEvents: Array<keyof typeof WebsiteSocketSubEvents> = [];
-  constructor(apiKey?: string, subEvents: Array<keyof typeof WebsiteSocketSubEvents> = []) {
+  constructor(apiKey?: string, subEvents: Array<keyof typeof WebsiteSocketSubEvents> = [], private readonly localAddress?: string) {
     super();
     this.apiKey = apiKey;
     this.connectWss();
     this.subEvents = subEvents;
   }
   async connectWss() {
-    const socket = io('wss://waxpeer.com', {
-      transports: ['websocket'],
-      path: '/socket.io/',
-      autoConnect: true,
-      extraHeaders: {
-        authorization: this.apiKey,
-      },
-    });
+    let socket = null;
+
+    if( this.localAddress ) {
+      let options = {};
+
+      options = { localAddress: this.localAddress };
+
+      const overrideHttpAgent = new http.Agent(options);
+
+      socket = io('wss://waxpeer.com', {
+        transports: ['websocket'],
+        path: '/socket.io/',
+        autoConnect: true,
+        extraHeaders: {
+          authorization: this.apiKey,
+        },
+        agent: overrideHttpAgent,
+        localAddress: this.localAddress,
+      });
+    }
+    else {
+      socket = io('wss://waxpeer.com', {
+        transports: ['websocket'],
+        path: '/socket.io/',
+        autoConnect: true,
+        extraHeaders: {
+          authorization: this.apiKey,
+        },
+      });
+    }
+
 
     socket.on('connect', () => {
       this.socketOpen = true;

@@ -54,7 +54,7 @@ export class Waxpeer {
   public version = 'v1';
   private getPricesLimiter = new RateLimiter({ tokensPerInterval: 60, interval: 60 * 1000 }); //Ignoring this limit might cause 429 error code or IP ban
   private getPricesDopplersLimiter = new RateLimiter({ tokensPerInterval: 60, interval: 60 * 1000 }); //Ignoring this limit might cause 429 error code or IP ban
-  constructor(api: string, baseUrl?: string) {
+  constructor(api: string, private readonly localAddress?: string, baseUrl?: string) {
     this.api = api;
     if (baseUrl) this.baseUrl = baseUrl;
   }
@@ -592,7 +592,7 @@ export class Waxpeer {
    *   "removed": 0
    * }
    */
-  public editItems(items: IEditItemsReq[], game: keyof typeof EGameId = 'csgo', localAddress?: string, family?: number): Promise<IResponseEdit> {
+  public editItems(items: IEditItemsReq[], game: keyof typeof EGameId = 'csgo'): Promise<IResponseEdit> {
     return this.post(
       `edit-items`,
       {
@@ -1283,18 +1283,18 @@ export class Waxpeer {
     return this.post(`merchant/deposits`, null, qs.stringify({ merchant, steam_id, tx_id }));
   }
 
-  public async post(url: string, body: any, token?: string, localAddress?: string, family?: number): Promise<any> {
+  public async post(url: string, body: any, token?: string): Promise<any> {
     let { baseUrl, api, version } = this;
     let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
     if (token) newUrl += `&${token}`;
     try {
-      if( localAddress && family ) {
+      if( this.localAddress ) {
         let options = {};
   
-        options = { localAddress, family };
+        options = { localAddress: this.localAddress, family };
   
-        const overrideHttpAgent = new http.Agent(options)
-        const overrideHttpsAgent = new https.Agent(options)
+        const overrideHttpAgent = new http.Agent(options);
+        const overrideHttpsAgent = new https.Agent(options);
 
         return (
           await axios.post(newUrl, body, {
@@ -1324,6 +1324,25 @@ export class Waxpeer {
     let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
     if (token) newUrl += `&${token}`;
     try {
+      if( this.localAddress ) {
+        let options = {};
+  
+        options = { localAddress: this.localAddress };
+  
+        const overrideHttpAgent = new http.Agent(options);
+        const overrideHttpsAgent = new https.Agent(options);
+
+        return (
+          await axios.get(newUrl, {
+            headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
+            cancelToken: this.newAxiosCancelationSource(60000),
+            timeout: 60000,
+            httpAgent: overrideHttpAgent,
+            httpsAgent: overrideHttpsAgent
+          })
+        ).data;
+      }
+
       return (
         await axios.get(newUrl, {
           headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
