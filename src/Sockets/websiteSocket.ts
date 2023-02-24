@@ -1,4 +1,4 @@
-import http from 'http';
+import https from 'https';
 import EventEmitter from 'events';
 import io from 'socket.io-client';
 import { WebsiteSocketSubEvents } from '../types/sockets';
@@ -21,7 +21,7 @@ export class WebsiteWebsocket extends EventEmitter {
 
       options = { localAddress: this.localAddress };
 
-      const overrideHttpAgent = new http.Agent(options);
+      const overrideHttpAgent = new https.Agent(options);
 
       socket = io('wss://waxpeer.com', {
         transports: ['websocket'],
@@ -31,7 +31,6 @@ export class WebsiteWebsocket extends EventEmitter {
           authorization: this.apiKey,
         },
         agent: overrideHttpAgent,
-        localAddress: this.localAddress,
       });
     }
     else {
