@@ -33,7 +33,8 @@ console.log(user);
 ### Fetch your trades and transactions history
 
 ```typescript
-const history = WP.myHistory(0, '2022-11-11', '2022-12-12', 'DESC');
+//MM-DD-YY
+const history = WP.myHistory(0, '11-11-2022', '12-12-2022', 'DESC');
 console.log(history);
 ```
 
