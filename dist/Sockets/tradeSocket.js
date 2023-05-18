@@ -61,7 +61,6 @@ class TradeWebsocket extends events_1.EventEmitter {
                         apiKey: this.apiKey,
                         tradeurl: this.tradelink,
                         source: 'custom',
-                        version: '1.3.0',
                         identity_secret: true,
                     }));
                     this.w.ws.send(JSON.stringify({
