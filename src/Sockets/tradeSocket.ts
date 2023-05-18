@@ -50,8 +50,8 @@ export class TradeWebsocket extends EventEmitter {
             steamid: this.steamid,
             apiKey: this.apiKey,
             tradeurl: this.tradelink,
-            source: 'custom',
             identity_secret : true,
+            source: 'custom',
           }),
         );
         this.w.ws.send(
@@ -61,7 +61,15 @@ export class TradeWebsocket extends EventEmitter {
           }),
         );
         this.w.int = setInterval(() => {
-          if (this.w.ws) this.w.ws.send(JSON.stringify({ name: 'ping' }));
+          if (this.w.ws) {
+            this.w.ws.send(JSON.stringify({ name: 'ping' }));
+            this.w.ws.send(
+              JSON.stringify({
+                source: 'custom',
+                identity_secret : true,
+              }),
+            );
+          }
         }, 25000);
       } else {
         this.w.ws.close();
