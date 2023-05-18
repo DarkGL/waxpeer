@@ -60,8 +60,13 @@ class TradeWebsocket extends events_1.EventEmitter {
                         steamid: this.steamid,
                         apiKey: this.apiKey,
                         tradeurl: this.tradelink,
-                        source: 'npm_waxpeer',
+                        source: 'custom',
                         version: '1.3.0',
+                        identity_secret: true,
+                    }));
+                    this.w.ws.send(JSON.stringify({
+                        source: 'custom',
+                        identity_secret: true,
                     }));
                     this.w.int = setInterval(() => {
                         if (this.w.ws)

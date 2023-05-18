@@ -33,7 +33,7 @@ class WebsiteWebsocket extends events_1.default {
                 let options = {};
                 options = { localAddress: this.localAddress };
                 const overrideHttpAgent = new https_1.default.Agent(options);
-                socket = (0, socket_io_client_1.default)('wss://waxpeer.com', {
+                socket = socket_io_client_1.default('wss://waxpeer.com', {
                     transports: ['websocket'],
                     path: '/socket.io/',
                     autoConnect: true,
@@ -44,7 +44,7 @@ class WebsiteWebsocket extends events_1.default {
                 });
             }
             else {
-                socket = (0, socket_io_client_1.default)('wss://waxpeer.com', {
+                socket = socket_io_client_1.default('wss://waxpeer.com', {
                     transports: ['websocket'],
                     path: '/socket.io/',
                     autoConnect: true,
