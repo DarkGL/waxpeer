@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"node ./dist/test.js\"",
-    "build": "tsc",
-    "push": "tsc && npm publish --access public"
+    "dev": "npx tsc-watch --onSuccess \"node ./dist/test.js\"",
+    "build": "npx tsc",
+    "push": "npx tsc && npm publish --access public"
   },
   "repository": {
     "type": "git",
@@ -30,16 +30,16 @@
   "homepage": "https://github.com/skylight-ity/waxpeer#readme",
   "devDependencies": {
     "ts-node": "^10.9.1",
-    "tsc-watch": "^6.0.0",
-    "typescript": "^3.9.10"
+    "tsc-watch": "^6.0.4",
+    "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@types/node": "^18.11.13",
-    "axios": "^0.27.2",
-    "dotenv": "^8.2.0",
+    "@types/node": "^20.2.1",
+    "axios": "^1.4.0",
+    "dotenv": "^16.0.3",
     "limiter": "^2.1.0",
-    "qs": "^6.11.0",
+    "qs": "^6.11.2",
     "socket.io-client": "^2.5.0",
-    "ws": "^8.11.0"
+    "ws": "^8.13.0"
   }
 }
