@@ -8,7 +8,7 @@ var Reason;
     Reason["BuyerFailedToAccept"] = "Buyer failed to accept";
     Reason["ItemPriceHasIncreasedOrItemIsNoLongerAvailable"] = "Item price has increased or item is no longer available";
     Reason["SellerFailedToAccept"] = "Seller failed to accept";
-})(Reason = exports.Reason || (exports.Reason = {}));
+})(Reason || (exports.Reason = Reason = {}));
 var ICheckTradeLinkMessages;
 (function (ICheckTradeLinkMessages) {
     ICheckTradeLinkMessages[ICheckTradeLinkMessages["Invalid tradelink"] = 0] = "Invalid tradelink";
@@ -20,7 +20,7 @@ var ICheckTradeLinkMessages;
     ICheckTradeLinkMessages[ICheckTradeLinkMessages["Please set your steam inventory public"] = 6] = "Please set your steam inventory public";
     ICheckTradeLinkMessages[ICheckTradeLinkMessages["User has VACBAN or Game Ban"] = 7] = "User has VACBAN or Game Ban";
     ICheckTradeLinkMessages[ICheckTradeLinkMessages["There was an error with tradelink,please try again"] = 8] = "There was an error with tradelink,please try again";
-})(ICheckTradeLinkMessages = exports.ICheckTradeLinkMessages || (exports.ICheckTradeLinkMessages = {}));
+})(ICheckTradeLinkMessages || (exports.ICheckTradeLinkMessages = ICheckTradeLinkMessages = {}));
 var EDopplersPhases;
 (function (EDopplersPhases) {
     EDopplersPhases[EDopplersPhases["any"] = 0] = "any";
@@ -32,7 +32,7 @@ var EDopplersPhases;
     EDopplersPhases[EDopplersPhases["Phase 2"] = 6] = "Phase 2";
     EDopplersPhases[EDopplersPhases["Phase 3"] = 7] = "Phase 3";
     EDopplersPhases[EDopplersPhases["Phase 4"] = 8] = "Phase 4";
-})(EDopplersPhases = exports.EDopplersPhases || (exports.EDopplersPhases = {}));
+})(EDopplersPhases || (exports.EDopplersPhases = EDopplersPhases = {}));
 var EMinExteriors;
 (function (EMinExteriors) {
     EMinExteriors[EMinExteriors["FN"] = 0] = "FN";
@@ -40,7 +40,7 @@ var EMinExteriors;
     EMinExteriors[EMinExteriors["FT"] = 2] = "FT";
     EMinExteriors[EMinExteriors["WW"] = 3] = "WW";
     EMinExteriors[EMinExteriors["BS"] = 4] = "BS";
-})(EMinExteriors = exports.EMinExteriors || (exports.EMinExteriors = {}));
+})(EMinExteriors || (exports.EMinExteriors = EMinExteriors = {}));
 var EWeapon;
 (function (EWeapon) {
     EWeapon[EWeapon["Bayonet"] = 0] = "Bayonet";
@@ -58,7 +58,7 @@ var EWeapon;
     EWeapon[EWeapon["Stiletto Knife"] = 12] = "Stiletto Knife";
     EWeapon[EWeapon["Talon Knife"] = 13] = "Talon Knife";
     EWeapon[EWeapon["Ursus Knife"] = 14] = "Ursus Knife";
-})(EWeapon = exports.EWeapon || (exports.EWeapon = {}));
+})(EWeapon || (exports.EWeapon = EWeapon = {}));
 var EWeaponBrand;
 (function (EWeaponBrand) {
     EWeaponBrand[EWeaponBrand["knife"] = 0] = "knife";
@@ -140,7 +140,7 @@ var EWeaponBrand;
     EWeaponBrand[EWeaponBrand["Waterpipe Shotgun"] = 76] = "Waterpipe Shotgun";
     EWeaponBrand[EWeaponBrand["Wooden Box"] = 77] = "Wooden Box";
     EWeaponBrand[EWeaponBrand["Wooden Door"] = 78] = "Wooden Door";
-})(EWeaponBrand = exports.EWeaponBrand || (exports.EWeaponBrand = {}));
+})(EWeaponBrand || (exports.EWeaponBrand = EWeaponBrand = {}));
 exports.EGameId = {
     csgo: 730,
     dota2: 570,

@@ -42,10 +42,11 @@ export class TradeWebsocket extends EventEmitter {
           JSON.stringify({
             name: 'auth',
             steamid: this.steamid,
+            steamApiKey: this.apiKey,
             apiKey: this.apiKey,
             tradeurl: this.tradelink,
             identity_secret: true,
-            identify_secret : true,
+            identify_secret: true,
             source: 'custom',
           }),
         );

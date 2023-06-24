@@ -58,6 +58,7 @@ class TradeWebsocket extends events_1.EventEmitter {
                     this.w.ws.send(JSON.stringify({
                         name: 'auth',
                         steamid: this.steamid,
+                        steamApiKey: this.apiKey,
                         apiKey: this.apiKey,
                         tradeurl: this.tradelink,
                         identity_secret: true,
