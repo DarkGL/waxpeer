@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WebsiteWebsocket = void 0;
-const https_1 = __importDefault(require("https"));
+const http_1 = __importDefault(require("http"));
 const events_1 = __importDefault(require("events"));
 const socket_io_client_1 = __importDefault(require("socket.io-client"));
 class WebsiteWebsocket extends events_1.default {
@@ -30,7 +30,7 @@ class WebsiteWebsocket extends events_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             let socket = null;
             if (this.localAddress) {
-                const overrideHttpsAgent = new https_1.default.Agent({ localAddress: this.localAddress });
+                const overrideHttpAgent = new http_1.default.Agent({ localAddress: this.localAddress });
                 socket = (0, socket_io_client_1.default)('wss://waxpeer.com', {
                     transports: ['websocket'],
                     path: '/socket.io/',
@@ -38,7 +38,8 @@ class WebsiteWebsocket extends events_1.default {
                     extraHeaders: {
                         authorization: this.apiKey,
                     },
-                    agent: overrideHttpsAgent,
+                    // @ts-ignore
+                    agent: overrideHttpAgent,
                     rejectUnauthorized: false,
                 });
             }
