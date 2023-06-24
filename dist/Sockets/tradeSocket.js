@@ -16,7 +16,7 @@ exports.TradeWebsocket = void 0;
 const events_1 = require("events");
 const ws_1 = __importDefault(require("ws"));
 class TradeWebsocket extends events_1.EventEmitter {
-    constructor(apiKey, steamid, tradelink, localAddress) {
+    constructor(steamApiKey, apiKey, steamid, tradelink, localAddress) {
         super();
         this.localAddress = localAddress;
         this.w = {
@@ -25,6 +25,7 @@ class TradeWebsocket extends events_1.EventEmitter {
             int: null,
         };
         this.socketOpen = false;
+        this.steamApiKey = steamApiKey;
         this.apiKey = apiKey;
         this.steamid = steamid;
         this.tradelink = tradelink;
@@ -58,9 +59,19 @@ class TradeWebsocket extends events_1.EventEmitter {
                     this.w.ws.send(JSON.stringify({
                         name: 'auth',
                         steamid: this.steamid,
+                        steamApiKey: this.steamApiKey,
                         apiKey: this.apiKey,
                         tradeurl: this.tradelink,
                         identity_secret: true,
+                        identify_secret: true,
+                        source: 'custom',
+                    }));
+                    this.w.ws.send(JSON.stringify({
+                        source: 'custom',
+                        identity_secret: true,
+                    }));
+                    this.w.ws.send(JSON.stringify({
+                        source: 'custom',
                         identify_secret: true,
                     }));
                     this.w.int = setInterval(() => {

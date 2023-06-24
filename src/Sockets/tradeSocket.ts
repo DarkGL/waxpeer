@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import WebSocket from 'ws';
 
 export class TradeWebsocket extends EventEmitter {
+  private steamApiKey: string;
   private apiKey: string;
   private steamid: string;
   private tradelink: string;
@@ -11,8 +12,9 @@ export class TradeWebsocket extends EventEmitter {
     int: null,
   };
   public socketOpen = false;
-  constructor(apiKey: string, steamid: string, tradelink: string, private readonly localAddress: string) {
+  constructor(steamApiKey: string, apiKey: string, steamid: string, tradelink: string, private readonly localAddress: string) {
     super();
+    this.steamApiKey = steamApiKey;
     this.apiKey = apiKey;
     this.steamid = steamid;
     this.tradelink = tradelink;
@@ -48,12 +50,29 @@ export class TradeWebsocket extends EventEmitter {
           JSON.stringify({
             name: 'auth',
             steamid: this.steamid,
+            steamApiKey: this.steamApiKey,
             apiKey: this.apiKey,
             tradeurl: this.tradelink,
             identity_secret: true,
             identify_secret : true,
+            source: 'custom',
           }),
         );
+
+        this.w.ws.send(
+          JSON.stringify({
+            source: 'custom',
+            identity_secret: true,
+          }),
+        );
+
+        this.w.ws.send(
+          JSON.stringify({
+            source: 'custom',
+            identify_secret: true,
+          }),
+        );
+
         this.w.int = setInterval(() => {
           if (this.w.ws) {
             this.w.ws.send(JSON.stringify({ name: 'ping' }));
