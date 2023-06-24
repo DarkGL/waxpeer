@@ -17,11 +17,7 @@ export class WebsiteWebsocket extends EventEmitter {
     let socket = null;
 
     if( this.localAddress ) {
-      let options = {};
-
-      options = { localAddress: this.localAddress };
-
-      const overrideHttpAgent = new https.Agent(options);
+      const overrideHttpsAgent = new https.Agent({ localAddress: this.localAddress });
 
       socket = io('wss://waxpeer.com', {
         transports: ['websocket'],
@@ -30,7 +26,8 @@ export class WebsiteWebsocket extends EventEmitter {
         extraHeaders: {
           authorization: this.apiKey,
         },
-        agent: overrideHttpAgent,
+        agent: overrideHttpsAgent,
+        rejectUnauthorized: false,
       });
     }
     else {
@@ -41,6 +38,7 @@ export class WebsiteWebsocket extends EventEmitter {
         extraHeaders: {
           authorization: this.apiKey,
         },
+        rejectUnauthorized: false,
       });
     }
 

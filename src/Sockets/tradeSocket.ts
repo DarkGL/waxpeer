@@ -60,6 +60,11 @@ export class TradeWebsocket extends EventEmitter {
             identity_secret : true,
           }),
         );
+        this.w.ws.send(
+          JSON.stringify({
+            identity_secret : true,
+          }),
+        );
         this.w.int = setInterval(() => {
           if (this.w.ws) {
             this.w.ws.send(JSON.stringify({ name: 'ping' }));

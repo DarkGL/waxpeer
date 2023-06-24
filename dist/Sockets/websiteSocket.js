@@ -30,9 +30,7 @@ class WebsiteWebsocket extends events_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             let socket = null;
             if (this.localAddress) {
-                let options = {};
-                options = { localAddress: this.localAddress };
-                const overrideHttpAgent = new https_1.default.Agent(options);
+                const overrideHttpsAgent = new https_1.default.Agent({ localAddress: this.localAddress });
                 socket = (0, socket_io_client_1.default)('wss://waxpeer.com', {
                     transports: ['websocket'],
                     path: '/socket.io/',
@@ -40,7 +38,8 @@ class WebsiteWebsocket extends events_1.default {
                     extraHeaders: {
                         authorization: this.apiKey,
                     },
-                    agent: overrideHttpAgent,
+                    agent: overrideHttpsAgent,
+                    rejectUnauthorized: false,
                 });
             }
             else {
@@ -51,6 +50,7 @@ class WebsiteWebsocket extends events_1.default {
                     extraHeaders: {
                         authorization: this.apiKey,
                     },
+                    rejectUnauthorized: false,
                 });
             }
             socket.on('connect', () => {
