@@ -60,6 +60,7 @@ class TradeWebsocket extends events_1.EventEmitter {
                         steamid: this.steamid,
                         apiKey: this.apiKey,
                         tradeurl: this.tradelink,
+                        identity_secret: true,
                         identify_secret: true,
                     }));
                     this.w.int = setInterval(() => {

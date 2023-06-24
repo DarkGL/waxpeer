@@ -50,6 +50,7 @@ export class TradeWebsocket extends EventEmitter {
             steamid: this.steamid,
             apiKey: this.apiKey,
             tradeurl: this.tradelink,
+            identity_secret: true,
             identify_secret : true,
           }),
         );
