@@ -50,30 +50,12 @@ export class TradeWebsocket extends EventEmitter {
             steamid: this.steamid,
             apiKey: this.apiKey,
             tradeurl: this.tradelink,
-            identity_secret : true,
-            source: 'custom',
-          }),
-        );
-        this.w.ws.send(
-          JSON.stringify({
-            source: 'custom',
-            identity_secret : true,
-          }),
-        );
-        this.w.ws.send(
-          JSON.stringify({
-            identity_secret : true,
+            identify_secret : true,
           }),
         );
         this.w.int = setInterval(() => {
           if (this.w.ws) {
             this.w.ws.send(JSON.stringify({ name: 'ping' }));
-            this.w.ws.send(
-              JSON.stringify({
-                source: 'custom',
-                identity_secret : true,
-              }),
-            );
           }
         }, 25000);
       } else {
