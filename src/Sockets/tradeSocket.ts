@@ -2,28 +2,20 @@ import { EventEmitter } from 'events';
 import WebSocket from 'ws';
 
 export class TradeWebsocket extends EventEmitter {
-  private steamApiKey: string;
-  private apiKey: string;
-  private steamid: string;
-  private tradelink: string;
   private w = {
     ws: null,
     tries: 0,
     int: null,
   };
   public socketOpen = false;
-  constructor(steamApiKey: string, apiKey: string, steamid: string, tradelink: string, private readonly localAddress: string) {
+  constructor(private readonly apiKey: string, private readonly steamid: string, private readonly tradelink: string, private readonly localAddress: string) {
     super();
-    this.steamApiKey = steamApiKey;
-    this.apiKey = apiKey;
-    this.steamid = steamid;
-    this.tradelink = tradelink;
     this.connectWss();
   }
   async connectWss() {
     if (this.w && this.w.ws) this.w.ws.close();
     let t = (this.w.tries + 1) * 1e3;
-    this.w.ws = new WebSocket('wss://wssex.waxpeer.com', undefined, { localAddress: this.localAddress });
+    this.w.ws = new WebSocket('wss://wssex.waxpeer.com', { localAddress: this.localAddress });
     this.w.ws.on('error', (e) => {
       console.log('TradeWebsocket error', e);
       this.w.ws.close();
@@ -50,7 +42,6 @@ export class TradeWebsocket extends EventEmitter {
           JSON.stringify({
             name: 'auth',
             steamid: this.steamid,
-            steamApiKey: this.steamApiKey,
             apiKey: this.apiKey,
             tradeurl: this.tradelink,
             identity_secret: true,
