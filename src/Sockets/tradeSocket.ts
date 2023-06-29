@@ -46,7 +46,6 @@ export class TradeWebsocket extends EventEmitter {
             apiKey: this.apiKey,
             tradeurl: this.tradelink,
             identity_secret: true,
-            identify_secret: true,
             source: 'custom',
           }),
         );
@@ -55,13 +54,6 @@ export class TradeWebsocket extends EventEmitter {
           JSON.stringify({
             source: 'custom',
             identity_secret: true,
-          }),
-        );
-
-        this.w.ws.send(
-          JSON.stringify({
-            source: 'custom',
-            identify_secret: true,
           }),
         );
 
