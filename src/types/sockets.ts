@@ -54,7 +54,7 @@ export interface TradeWebsocketAcceptWithdraw {
 
 export interface TradeWebsocketAcceptWithdrawData {
   trade_id: string;
-  seller_steamid: string;
+  partner: string;
 }
 
 export enum WebsiteSocketSubEvents {
