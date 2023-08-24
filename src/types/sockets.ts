@@ -53,7 +53,7 @@ export interface TradeWebsocketAcceptWithdraw {
 }
 
 export interface TradeWebsocketAcceptWithdrawData {
-  trade_id: string;
+  tradeid: string;
   partner: string;
 }
 
