@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TradeWebsocket = void 0;
+const https_1 = __importDefault(require("https"));
 const events_1 = require("events");
 const ws_1 = __importDefault(require("ws"));
 class TradeWebsocket extends events_1.EventEmitter {
@@ -34,7 +35,8 @@ class TradeWebsocket extends events_1.EventEmitter {
             if (this.w && this.w.ws)
                 this.w.ws.close();
             let t = (this.w.tries + 1) * 1e3;
-            this.w.ws = new ws_1.default('wss://wssex.waxpeer.com', { localAddress: this.localAddress });
+            const httpsAgent = new https_1.default.Agent(Object.assign({ keepAlive: true }, (this.localAddress ? { localAddress: this.localAddress } : {})));
+            this.w.ws = new ws_1.default('wss://wssex.waxpeer.com', { localAddress: this.localAddress, agent: httpsAgent });
             this.w.ws.on('error', (e) => {
                 console.log('TradeWebsocket error', e);
                 this.w.ws.close();

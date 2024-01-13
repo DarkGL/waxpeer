@@ -1,3 +1,4 @@
+import https from 'https';
 import { EventEmitter } from 'events';
 import WebSocket from 'ws';
 
@@ -9,12 +10,18 @@ export class TradeWebsocket extends EventEmitter {
   };
   constructor(private readonly apiKey: string, private readonly steamid: string, private readonly tradelink: string, private readonly localAddress: string) {
     super();
+    
     this.connectWss();
   }
   async connectWss() {
     if (this.w && this.w.ws) this.w.ws.close();
+
     let t = (this.w.tries + 1) * 1e3;
-    this.w.ws = new WebSocket('wss://wssex.waxpeer.com', { localAddress: this.localAddress });
+    
+    const httpsAgent = new https.Agent({ keepAlive: true, ...( this.localAddress ? { localAddress: this.localAddress } : {} ) });
+
+    this.w.ws = new WebSocket('wss://wssex.waxpeer.com', { localAddress: this.localAddress, agent: httpsAgent });
+
     this.w.ws.on('error', (e) => {
       console.log('TradeWebsocket error', e);
       this.w.ws.close();
