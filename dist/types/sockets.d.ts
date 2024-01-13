@@ -129,3 +129,4 @@ interface User {
     can_p2p: boolean;
 }
 export {};
+//# sourceMappingURL=sockets.d.ts.map

@@ -9,3 +9,4 @@ export declare class TradeWebsocket extends EventEmitter {
     constructor(apiKey: string, steamid: string, tradelink: string, localAddress: string);
     connectWss(): Promise<void>;
 }
+//# sourceMappingURL=tradeSocket.d.ts.map

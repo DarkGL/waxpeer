@@ -632,3 +632,4 @@ export declare const EGameId: {
     readonly rust: 252490;
 };
 export {};
+//# sourceMappingURL=waxpeer.d.ts.map

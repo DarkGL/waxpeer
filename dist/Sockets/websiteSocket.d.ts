@@ -8,3 +8,4 @@ export declare class WebsiteWebsocket extends EventEmitter {
     constructor(apiKey?: string, subEvents?: Array<keyof typeof WebsiteSocketSubEvents>, localAddress?: string);
     connectWss(): Promise<void>;
 }
+//# sourceMappingURL=websiteSocket.d.ts.map
