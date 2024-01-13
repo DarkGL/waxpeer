@@ -27,7 +27,6 @@ class TradeWebsocket extends events_1.EventEmitter {
             tries: 0,
             int: null,
         };
-        this.socketOpen = false;
         this.connectWss();
     }
     connectWss() {
@@ -42,7 +41,6 @@ class TradeWebsocket extends events_1.EventEmitter {
             });
             this.w.ws.on('close', (e) => {
                 this.w.tries += 1;
-                this.socketOpen = false;
                 console.log(`TradeWebsocket closed`, this.steamid);
                 if (this.steamid && this.apiKey) {
                     setTimeout(function () {
@@ -51,7 +49,6 @@ class TradeWebsocket extends events_1.EventEmitter {
                 }
             });
             this.w.ws.on('open', (e) => {
-                this.socketOpen = true;
                 console.log(`TradeWebsocket opened`, this.steamid);
                 if (this.steamid) {
                     clearInterval(this.w.int);

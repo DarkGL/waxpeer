@@ -19,49 +19,24 @@ const socket_io_client_1 = __importDefault(require("socket.io-client"));
 class WebsiteWebsocket extends events_1.default {
     constructor(apiKey, subEvents = [], localAddress) {
         super();
-        this.localAddress = localAddress;
-        this.socketOpen = false;
-        this.subEvents = [];
         this.apiKey = apiKey;
-        this.connectWss();
         this.subEvents = subEvents;
+        this.localAddress = localAddress;
+        this.connectWss();
     }
     connectWss() {
         return __awaiter(this, void 0, void 0, function* () {
-            let socket = null;
-            if (this.localAddress) {
-                const overrideHttpsAgent = new https_1.default.Agent({ localAddress: this.localAddress });
-                socket = (0, socket_io_client_1.default)('wss://waxpeer.com', {
-                    transports: ['websocket'],
-                    path: '/socket.io/',
-                    autoConnect: true,
-                    extraHeaders: {
-                        authorization: this.apiKey,
-                    },
-                    agent: overrideHttpsAgent,
-                    rejectUnauthorized: false,
-                });
-            }
-            else {
-                socket = (0, socket_io_client_1.default)('wss://waxpeer.com', {
-                    transports: ['websocket'],
-                    path: '/socket.io/',
-                    autoConnect: true,
-                    extraHeaders: {
-                        authorization: this.apiKey,
-                    },
-                    rejectUnauthorized: false,
-                });
-            }
+            const httpsAgent = new https_1.default.Agent(Object.assign({ keepAlive: true }, (this.localAddress ? { localAddress: this.localAddress } : {})));
+            const socket = (0, socket_io_client_1.default)('wss://waxpeer.com', Object.assign({ transports: ['websocket'], path: '/socket.io/', autoConnect: true, extraHeaders: {
+                    authorization: this.apiKey,
+                }, agent: httpsAgent, rejectUnauthorized: false }, (this.localAddress ? { localAddress: this.localAddress } : {})));
             socket.on('connect', () => {
-                this.socketOpen = true;
                 this.subEvents.map((sub) => {
                     socket.emit('sub', { name: sub, value: true });
                 });
                 console.log('WebsiteWebsocket connected');
             });
             socket.on('disconnect', () => {
-                this.socketOpen = false;
                 console.log('WebsiteWebsocket disconnected');
             });
             socket.on('handshake', (data) => {
@@ -83,7 +58,6 @@ class WebsiteWebsocket extends events_1.default {
                 this.emit('change_user', data);
             });
             socket.on('connect_error', (err) => {
-                this.socketOpen = false;
                 console.log('connect_error', err);
             });
         });

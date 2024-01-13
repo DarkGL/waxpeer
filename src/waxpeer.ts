@@ -1,4 +1,3 @@
-import http from 'http';
 import https from 'https';
 import axios from 'axios';
 import qs from 'qs';
@@ -49,14 +48,18 @@ import {
 const RateLimiter = require('limiter').RateLimiter;
 
 export class Waxpeer {
-  private api: string;
-  public baseUrl = 'https://api.waxpeer.com';
+  public readonly baseUrl = 'https://api.waxpeer.com';
   public version = 'v1';
   private getPricesLimiter = new RateLimiter({ tokensPerInterval: 60, interval: 60 * 1000 }); //Ignoring this limit might cause 429 error code or IP ban
   private getPricesDopplersLimiter = new RateLimiter({ tokensPerInterval: 60, interval: 60 * 1000 }); //Ignoring this limit might cause 429 error code or IP ban
-  constructor(api: string, private readonly localAddress?: string, baseUrl?: string) {
-    this.api = api;
-    if (baseUrl) this.baseUrl = baseUrl;
+  
+  private httpsAgent: https.Agent;
+  constructor(private readonly api: string, localAddress?: string) {
+    this.httpsAgent = new https.Agent({
+      rejectUnauthorized: false,
+      keepAlive: true,
+      ...(localAddress ? { localAddress } : {}),
+    });
   }
   public async sleep(timer: number) {
     await new Promise((res) => setTimeout(res, timer));
@@ -1288,30 +1291,12 @@ export class Waxpeer {
     let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
     if (token) newUrl += `&${token}`;
     try {
-      if( this.localAddress ) {
-        let options = {};
-  
-        options = { localAddress: this.localAddress };
-  
-        const overrideHttpAgent = new http.Agent(options);
-        const overrideHttpsAgent = new https.Agent(options);
-
-        return (
-          await axios.post(newUrl, body, {
-            headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
-            cancelToken: this.newAxiosCancelationSource(60000),
-            timeout: 60000,
-            httpAgent: overrideHttpAgent,
-            httpsAgent: overrideHttpsAgent
-          })
-        ).data;
-      }
-
       return (
         await axios.post(newUrl, body, {
           headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
           cancelToken: this.newAxiosCancelationSource(60000),
           timeout: 60000,
+          httpsAgent: this.httpsAgent,
         })
       ).data;
     } catch (e) {
@@ -1324,30 +1309,12 @@ export class Waxpeer {
     let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
     if (token) newUrl += `&${token}`;
     try {
-      if( this.localAddress ) {
-        let options = {};
-  
-        options = { localAddress: this.localAddress };
-  
-        const overrideHttpAgent = new http.Agent(options);
-        const overrideHttpsAgent = new https.Agent(options);
-
-        return (
-          await axios.get(newUrl, {
-            headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
-            cancelToken: this.newAxiosCancelationSource(60000),
-            timeout: 60000,
-            httpAgent: overrideHttpAgent,
-            httpsAgent: overrideHttpsAgent
-          })
-        ).data;
-      }
-
       return (
         await axios.get(newUrl, {
           headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
           cancelToken: this.newAxiosCancelationSource(60000),
           timeout: 60000,
+          httpsAgent: this.httpsAgent,
         })
       ).data;
     } catch (e) {

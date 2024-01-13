@@ -1,12 +1,12 @@
 import { EDopplersPhases, EGameId, EMinExteriors, EWeapon, EWeaponBrand, FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, IBuyOrderHistory, IBuyOrders, ICheckTradeLink, ICheckWssUser, ICreateBuyOrder, IEditBuyOrder, IEditItemsReq, IGetItemsList, IGetSteamItems, IHistory, IListedItem, IMassInfo, IMerchantDepositsHistory, IMerchantInventory, IMerchantInventoryUpate, IMerchantListItem, IMerchantListItemsSteam, IMerchantUser, IMyHistory, IPrices, IPricesDopplers, IReadyTransferTrade, IRemoveAll, IRemoveAllOrders, IRemoveBuyOrder, IResponseEdit, ISetMyKeys, IUser, ListedItem, ListItems, TradesStatus } from './types/waxpeer';
 export declare class Waxpeer {
-    private readonly localAddress?;
-    private api;
-    baseUrl: string;
+    private readonly api;
+    readonly baseUrl = "https://api.waxpeer.com";
     version: string;
     private getPricesLimiter;
     private getPricesDopplersLimiter;
-    constructor(api: string, localAddress?: string, baseUrl?: string);
+    private httpsAgent;
+    constructor(api: string, localAddress?: string);
     sleep(timer: number): Promise<void>;
     /**
      * Fetch trades and transactions by one request, maximum 100 in response.

@@ -4,54 +4,33 @@ import io from 'socket.io-client';
 import { WebsiteSocketSubEvents } from '../types/sockets';
 
 export class WebsiteWebsocket extends EventEmitter {
-  private apiKey: string;
-  public socketOpen = false;
-  public subEvents: Array<keyof typeof WebsiteSocketSubEvents> = [];
-  constructor(apiKey?: string, subEvents: Array<keyof typeof WebsiteSocketSubEvents> = [], private readonly localAddress?: string) {
+  constructor(private readonly apiKey?: string, private readonly subEvents: Array<keyof typeof WebsiteSocketSubEvents> = [], private readonly localAddress?: string) {
     super();
-    this.apiKey = apiKey;
+    
     this.connectWss();
-    this.subEvents = subEvents;
   }
   async connectWss() {
-    let socket = null;
+    const httpsAgent = new https.Agent({ keepAlive: true, ...( this.localAddress ? { localAddress: this.localAddress } : {} ) });
 
-    if( this.localAddress ) {
-      const overrideHttpsAgent = new https.Agent({ localAddress: this.localAddress });
-
-      socket = io('wss://waxpeer.com', {
-        transports: ['websocket'],
-        path: '/socket.io/',
-        autoConnect: true,
-        extraHeaders: {
-          authorization: this.apiKey,
-        },
-        agent: overrideHttpsAgent,
-        rejectUnauthorized: false,
-      });
-    }
-    else {
-      socket = io('wss://waxpeer.com', {
-        transports: ['websocket'],
-        path: '/socket.io/',
-        autoConnect: true,
-        extraHeaders: {
-          authorization: this.apiKey,
-        },
-        rejectUnauthorized: false,
-      });
-    }
-
+    const socket = io('wss://waxpeer.com', {
+      transports: ['websocket'],
+      path: '/socket.io/',
+      autoConnect: true,
+      extraHeaders: {
+        authorization: this.apiKey,
+      },
+      agent: httpsAgent,
+      rejectUnauthorized: false,
+      ...( this.localAddress ? { localAddress: this.localAddress } : {} )
+    });
 
     socket.on('connect', () => {
-      this.socketOpen = true;
       this.subEvents.map((sub) => {
         socket.emit('sub', { name: sub, value: true });
       });
       console.log('WebsiteWebsocket connected');
     });
     socket.on('disconnect', () => {
-      this.socketOpen = false;
       console.log('WebsiteWebsocket disconnected');
     });
     socket.on('handshake', (data) => {
@@ -73,7 +52,6 @@ export class WebsiteWebsocket extends EventEmitter {
       this.emit('change_user', data);
     });
     socket.on('connect_error', (err) => {
-      this.socketOpen = false;
       console.log('connect_error', err);
     });
   }
