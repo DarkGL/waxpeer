@@ -3,8 +3,6 @@ export declare class Waxpeer {
     private readonly api;
     readonly baseUrl = "https://api.waxpeer.com";
     version: string;
-    private getPricesLimiter;
-    private getPricesDopplersLimiter;
     private httpsAgent;
     constructor(api: string, localAddress?: string);
     sleep(timer: number): Promise<void>;

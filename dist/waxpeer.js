@@ -1,13 +1,10 @@
 import https from 'https';
 import axios from 'axios';
 import qs from 'qs';
-import { RateLimiter } from 'limiter';
 export class Waxpeer {
     api;
     baseUrl = 'https://api.waxpeer.com';
     version = 'v1';
-    getPricesLimiter = new RateLimiter({ tokensPerInterval: 60, interval: 60 * 1000 });
-    getPricesDopplersLimiter = new RateLimiter({ tokensPerInterval: 60, interval: 60 * 1000 });
     httpsAgent;
     constructor(api, localAddress) {
         this.api = api;
@@ -58,8 +55,6 @@ export class Waxpeer {
         return this.get('fetch-my-inventory', qs.stringify({ game }));
     }
     getPrices(game = 'csgo', min_price = undefined, max_price = undefined, search = undefined, minified = 1, highest_offer = 0, single = 0) {
-        if (!this.getPricesLimiter.tryRemoveTokens(1))
-            return Promise.reject(new Error('Too many requests, try again later'));
         return this.get(`prices`, qs.stringify({
             game,
             min_price,
@@ -71,8 +66,6 @@ export class Waxpeer {
         }));
     }
     getPricesDopplers(phase = 'any', exterior = undefined, weapon = undefined, minified = 1, min_price = undefined, max_price = undefined, search = undefined, single = 0) {
-        if (!this.getPricesDopplersLimiter.tryRemoveTokens(1))
-            return Promise.reject(new Error('Too many requests, try again later'));
         return this.get(`prices/dopplers`, qs.stringify({ phase, exterior, weapon, minified, min_price, max_price, search, single }));
     }
     massInfo(names, game = 'csgo') {

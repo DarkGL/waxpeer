@@ -45,13 +45,10 @@ import {
   ListItems,
   TradesStatus,
 } from './types/waxpeer.js';
-import { RateLimiter } from 'limiter';
 
 export class Waxpeer {
   public readonly baseUrl = 'https://api.waxpeer.com';
   public version = 'v1';
-  private getPricesLimiter = new RateLimiter({ tokensPerInterval: 60, interval: 60 * 1000 }); //Ignoring this limit might cause 429 error code or IP ban
-  private getPricesDopplersLimiter = new RateLimiter({ tokensPerInterval: 60, interval: 60 * 1000 }); //Ignoring this limit might cause 429 error code or IP ban
   
   private httpsAgent: https.Agent;
   constructor(private readonly api: string, localAddress?: string) {
@@ -393,8 +390,6 @@ export class Waxpeer {
     highest_offer: number = 0,
     single: 0 | 1 = 0,
   ): Promise<IPrices> {
-    if (!this.getPricesLimiter.tryRemoveTokens(1))
-      return Promise.reject(new Error('Too many requests, try again later'));
     return this.get(
       `prices`,
       qs.stringify({
@@ -449,8 +444,6 @@ export class Waxpeer {
     search: string = undefined,
     single: 0 | 1 = 0,
   ): Promise<IPricesDopplers> {
-    if (!this.getPricesDopplersLimiter.tryRemoveTokens(1))
-      return Promise.reject(new Error('Too many requests, try again later'));
     return this.get(
       `prices/dopplers`,
       qs.stringify({ phase, exterior, weapon, minified, min_price, max_price, search, single }),
