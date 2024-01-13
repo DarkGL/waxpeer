@@ -48,7 +48,7 @@ import {
 
 export class Waxpeer {
   public readonly baseUrl = 'https://api.waxpeer.com';
-  public version = 'v1';
+  public readonly version = 'v1';
   
   private httpsAgent: https.Agent;
   constructor(private readonly api: string, localAddress?: string) {
@@ -57,9 +57,6 @@ export class Waxpeer {
       keepAlive: true,
       ...(localAddress ? { localAddress } : {}),
     });
-  }
-  public async sleep(timer: number) {
-    await new Promise((res) => setTimeout(res, timer));
   }
 
   /**
@@ -1280,45 +1277,30 @@ export class Waxpeer {
   }
 
   public async post(url: string, body: any, token?: string): Promise<any> {
-    let { baseUrl, api, version } = this;
-    let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
+    let newUrl = `${this.baseUrl}/${this.version}/${url}?api=${this.api}`;
     if (token) newUrl += `&${token}`;
     try {
-      return (
-        await axios.post(newUrl, body, {
+      return axios.post(newUrl, body, {
           headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
-          cancelToken: this.newAxiosCancelationSource(60000),
           timeout: 60000,
           httpsAgent: this.httpsAgent,
-        })
-      ).data;
+        }).then((response) => response.data);
     } catch (e) {
       throw e;
     }
   }
 
   public async get(url: string, token?: string): Promise<any> {
-    let { baseUrl, api, version } = this;
-    let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
+    let newUrl = `${this.baseUrl}/${this.version}/${url}?api=${this.api}`;
     if (token) newUrl += `&${token}`;
     try {
-      return (
-        await axios.get(newUrl, {
+      return axios.get(newUrl, {
           headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
-          cancelToken: this.newAxiosCancelationSource(60000),
           timeout: 60000,
           httpsAgent: this.httpsAgent,
-        })
-      ).data;
+        }).then((response) => response.data);
     } catch (e) {
       throw e;
     }
-  }
-  private newAxiosCancelationSource(ms: number = 1) {
-    const tokenSource = axios.CancelToken.source();
-    setTimeout(() => {
-      tokenSource.cancel();
-    }, ms);
-    return tokenSource.token;
   }
 }

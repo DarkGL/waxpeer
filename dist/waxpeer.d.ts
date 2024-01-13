@@ -2,10 +2,9 @@ import { EDopplersPhases, EGameId, EMinExteriors, EWeapon, EWeaponBrand, FetchIn
 export declare class Waxpeer {
     private readonly api;
     readonly baseUrl = "https://api.waxpeer.com";
-    version: string;
+    readonly version = "v1";
     private httpsAgent;
     constructor(api: string, localAddress?: string);
-    sleep(timer: number): Promise<void>;
     myHistory(skip: number, start: string, end: string, sort?: 'ASC' | 'DESC'): Promise<IMyHistory>;
     changeTradeLink(tradelink: string): Promise<ICheckTradeLink>;
     buyItemWithName(name: string, price: number, token: string, partner: string, project_id?: string, game?: keyof typeof EGameId): Promise<IBuy>;
@@ -57,6 +56,5 @@ export declare class Waxpeer {
     MerchantDepositsHistory(merchant: string, steam_id?: string, tx_id?: string): Promise<IMerchantDepositsHistory>;
     post(url: string, body: any, token?: string): Promise<any>;
     get(url: string, token?: string): Promise<any>;
-    private newAxiosCancelationSource;
 }
 //# sourceMappingURL=waxpeer.d.ts.map

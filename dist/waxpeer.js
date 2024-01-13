@@ -14,9 +14,6 @@ export class Waxpeer {
             ...(localAddress ? { localAddress } : {}),
         });
     }
-    async sleep(timer) {
-        await new Promise((res) => setTimeout(res, timer));
-    }
     myHistory(skip, start, end, sort = 'DESC') {
         return this.post('my-history', { skip, start, end, sort });
     }
@@ -172,45 +169,34 @@ export class Waxpeer {
         return this.post(`merchant/deposits`, null, qs.stringify({ merchant, steam_id, tx_id }));
     }
     async post(url, body, token) {
-        let { baseUrl, api, version } = this;
-        let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
+        let newUrl = `${this.baseUrl}/${this.version}/${url}?api=${this.api}`;
         if (token)
             newUrl += `&${token}`;
         try {
-            return (await axios.post(newUrl, body, {
+            return axios.post(newUrl, body, {
                 headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
-                cancelToken: this.newAxiosCancelationSource(60000),
                 timeout: 60000,
                 httpsAgent: this.httpsAgent,
-            })).data;
+            }).then((response) => response.data);
         }
         catch (e) {
             throw e;
         }
     }
     async get(url, token) {
-        let { baseUrl, api, version } = this;
-        let newUrl = `${baseUrl}/${version}/${url}?api=${api}`;
+        let newUrl = `${this.baseUrl}/${this.version}/${url}?api=${this.api}`;
         if (token)
             newUrl += `&${token}`;
         try {
-            return (await axios.get(newUrl, {
+            return axios.get(newUrl, {
                 headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
-                cancelToken: this.newAxiosCancelationSource(60000),
                 timeout: 60000,
                 httpsAgent: this.httpsAgent,
-            })).data;
+            }).then((response) => response.data);
         }
         catch (e) {
             throw e;
         }
-    }
-    newAxiosCancelationSource(ms = 1) {
-        const tokenSource = axios.CancelToken.source();
-        setTimeout(() => {
-            tokenSource.cancel();
-        }, ms);
-        return tokenSource.token;
     }
 }
 //# sourceMappingURL=waxpeer.js.map
