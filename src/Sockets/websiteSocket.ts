@@ -1,7 +1,7 @@
 import https from 'https';
 import EventEmitter from 'events';
 import io from 'socket.io-client';
-import { WebsiteSocketSubEvents } from '../types/sockets';
+import { WebsiteSocketSubEvents } from '../types/sockets.js';
 
 export class WebsiteWebsocket extends EventEmitter {
   constructor(private readonly apiKey?: string, private readonly subEvents: Array<keyof typeof WebsiteSocketSubEvents> = [], private readonly localAddress?: string) {

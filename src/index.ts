@@ -1,4 +1,4 @@
-import { Waxpeer } from './waxpeer';
-import { TradeWebsocket } from './Sockets/tradeSocket';
-import { WebsiteWebsocket } from './Sockets/websiteSocket';
+import { Waxpeer } from './waxpeer.js';
+import { TradeWebsocket } from './Sockets/tradeSocket.js';
+import { WebsiteWebsocket } from './Sockets/websiteSocket.js';
 export { Waxpeer, TradeWebsocket, WebsiteWebsocket };

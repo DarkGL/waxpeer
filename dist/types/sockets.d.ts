@@ -1,4 +1,4 @@
-import { EGameId } from './waxpeer';
+import { EGameId } from './waxpeer.js';
 export interface TradeWebsocketCreateTrade {
     name: 'send-trade';
     data: TradeWebsocketCreateTradeData;

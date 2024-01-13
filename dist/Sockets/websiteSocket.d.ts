@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import EventEmitter from 'events';
-import { WebsiteSocketSubEvents } from '../types/sockets';
+import { WebsiteSocketSubEvents } from '../types/sockets.js';
 export declare class WebsiteWebsocket extends EventEmitter {
     private readonly apiKey?;
     private readonly subEvents;

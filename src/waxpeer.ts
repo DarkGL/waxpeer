@@ -44,7 +44,7 @@ import {
   ListedItem,
   ListItems,
   TradesStatus,
-} from './types/waxpeer';
+} from './types/waxpeer.js';
 import { RateLimiter } from 'limiter';
 
 export class Waxpeer {
