@@ -45,7 +45,7 @@ import {
   ListItems,
   TradesStatus,
 } from './types/waxpeer';
-const RateLimiter = require('limiter').RateLimiter;
+import { RateLimiter } from 'limiter';
 
 export class Waxpeer {
   public readonly baseUrl = 'https://api.waxpeer.com';

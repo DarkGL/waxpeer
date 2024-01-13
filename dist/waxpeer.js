@@ -1,7 +1,7 @@
 import https from 'https';
 import axios from 'axios';
 import qs from 'qs';
-const RateLimiter = require('limiter').RateLimiter;
+import { RateLimiter } from 'limiter';
 export class Waxpeer {
     api;
     baseUrl = 'https://api.waxpeer.com';
