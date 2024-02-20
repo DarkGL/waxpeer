@@ -1,17 +1,19 @@
-import https from 'https';
-import axios from 'axios';
+import { Client } from 'undici';
 import qs from 'qs';
 export class Waxpeer {
     api;
     baseUrl = 'https://api.waxpeer.com';
     version = 'v1';
-    httpsAgent;
+    apiClient;
     constructor(api, localAddress) {
         this.api = api;
-        this.httpsAgent = new https.Agent({
-            rejectUnauthorized: false,
-            keepAlive: true,
+        this.apiClient = new Client(this.baseUrl, {
             ...(localAddress ? { localAddress } : {}),
+            keepAliveTimeout: 60000,
+            connect: {
+                rejectUnauthorized: false,
+                keepAlive: true,
+            },
         });
     }
     myHistory(skip, start, end, sort = 'DESC') {
@@ -169,30 +171,28 @@ export class Waxpeer {
         return this.post(`merchant/deposits`, null, qs.stringify({ merchant, steam_id, tx_id }));
     }
     async post(url, body, token) {
-        let newUrl = `${this.baseUrl}/${this.version}/${url}?api=${this.api}`;
-        if (token)
-            newUrl += `&${token}`;
+        const path = `/${this.version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
         try {
-            return axios.post(newUrl, body, {
-                headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
-                timeout: 60000,
-                httpsAgent: this.httpsAgent,
-            }).then((response) => response.data);
+            return this.apiClient.request({
+                method: 'POST',
+                path,
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then((response) => response.body.json());
         }
         catch (e) {
             throw e;
         }
     }
     async get(url, token) {
-        let newUrl = `${this.baseUrl}/${this.version}/${url}?api=${this.api}`;
-        if (token)
-            newUrl += `&${token}`;
+        const path = `/${this.version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
         try {
-            return axios.get(newUrl, {
-                headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
-                timeout: 60000,
-                httpsAgent: this.httpsAgent,
-            }).then((response) => response.data);
+            return this.apiClient.request({
+                method: 'GET',
+                path,
+            }).then((response) => response.body.json());
         }
         catch (e) {
             throw e;

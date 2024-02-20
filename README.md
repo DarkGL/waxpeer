@@ -348,9 +348,6 @@ try {
   let user = await WP.getProfile();
   console.log(user);
 } catch (e) {
-  let timeout = axios.isCancel(e) ? true : false;
-  let response = e?.response?.data;
-  let status_code = e?.response?.status;
-  console.log({ timeout, status_code, response }); //{ timeout: false, status_code: 403, response: { success: false, msg: 'wrong api' } }
+  console.log(e);
 }
 ```

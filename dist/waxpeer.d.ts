@@ -3,7 +3,7 @@ export declare class Waxpeer {
     private readonly api;
     readonly baseUrl = "https://api.waxpeer.com";
     readonly version = "v1";
-    private httpsAgent;
+    private apiClient;
     constructor(api: string, localAddress?: string);
     myHistory(skip: number, start: string, end: string, sort?: 'ASC' | 'DESC'): Promise<IMyHistory>;
     changeTradeLink(tradelink: string): Promise<ICheckTradeLink>;

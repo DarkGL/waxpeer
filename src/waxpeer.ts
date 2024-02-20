@@ -1,5 +1,5 @@
 import https from 'https';
-import axios from 'axios';
+import { Client } from 'undici';
 import qs from 'qs';
 import {
   EDopplersPhases,
@@ -49,14 +49,17 @@ import {
 export class Waxpeer {
   public readonly baseUrl = 'https://api.waxpeer.com';
   public readonly version = 'v1';
-  
-  private httpsAgent: https.Agent;
+
+  private apiClient: Client;
   constructor(private readonly api: string, localAddress?: string) {
-    this.httpsAgent = new https.Agent({
-      rejectUnauthorized: false,
-      keepAlive: true,
+    this.apiClient = new Client(this.baseUrl, {
       ...(localAddress ? { localAddress } : {}),
-    });
+      keepAliveTimeout: 60000,
+      connect: {
+          rejectUnauthorized: false,
+          keepAlive: true,
+      },
+  });
   }
 
   /**
@@ -1277,28 +1280,28 @@ export class Waxpeer {
   }
 
   public async post(url: string, body: any, token?: string): Promise<any> {
-    let newUrl = `${this.baseUrl}/${this.version}/${url}?api=${this.api}`;
-    if (token) newUrl += `&${token}`;
+    const path = `/${this.version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
     try {
-      return axios.post(newUrl, body, {
-          headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
-          timeout: 60000,
-          httpsAgent: this.httpsAgent,
-        }).then((response) => response.data);
+      return this.apiClient.request({
+        method: 'POST',
+        path,
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then((response) => response.body.json());
     } catch (e) {
       throw e;
     }
   }
 
   public async get(url: string, token?: string): Promise<any> {
-    let newUrl = `${this.baseUrl}/${this.version}/${url}?api=${this.api}`;
-    if (token) newUrl += `&${token}`;
+    const path = `/${this.version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
     try {
-      return axios.get(newUrl, {
-          headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
-          timeout: 60000,
-          httpsAgent: this.httpsAgent,
-        }).then((response) => response.data);
+      return this.apiClient.request({
+        method: 'GET',
+        path,
+      }).then((response) => response.body.json());
     } catch (e) {
       throw e;
     }

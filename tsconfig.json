@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ESNEXT",
     "module": "esnext",
     "lib": [
-      "es2017",
-      "esnext",
-      "es6"
+      "ESNext"
     ],
     "declaration": true,
     "declarationMap": true,
