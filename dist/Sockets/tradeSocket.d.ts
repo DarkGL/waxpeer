@@ -6,6 +6,7 @@ export declare class TradeWebsocket extends EventEmitter {
     private readonly tradelink;
     private readonly localAddress;
     private w;
+    private readonly readyStatesMap;
     constructor(apiKey: string, steamid: string, tradelink: string, localAddress: string);
     connectWss(): Promise<void>;
 }

@@ -11,6 +11,12 @@ export class TradeWebsocket extends EventEmitter {
         tries: 0,
         int: null,
     };
+    readyStatesMap = {
+        CONNECTING: 0,
+        OPEN: 1,
+        CLOSING: 2,
+        CLOSED: 3,
+    };
     constructor(apiKey, steamid, tradelink, localAddress) {
         super();
         this.apiKey = apiKey;
@@ -20,23 +26,24 @@ export class TradeWebsocket extends EventEmitter {
         this.connectWss();
     }
     async connectWss() {
-        if (this.w && this.w.ws)
-            this.w.ws.close();
+        if (this.w && this.w.ws && this.w.ws.readyState !== this.readyStatesMap.CLOSED)
+            this.w.ws.terminate();
         let t = (this.w.tries + 1) * 1e3;
         const httpsAgent = new https.Agent({ keepAlive: true, ...(this.localAddress ? { localAddress: this.localAddress } : {}) });
         this.w.ws = new WebSocket('wss://wssex.waxpeer.com', { localAddress: this.localAddress, agent: httpsAgent });
         this.w.ws.on('error', (e) => {
             console.log('TradeWebsocket error', e);
-            this.w.ws.close();
         });
         this.w.ws.on('close', (e) => {
             this.w.tries += 1;
             console.log(`TradeWebsocket closed`, this.steamid);
-            if (this.steamid && this.apiKey) {
-                setTimeout(function () {
+            setTimeout(function () {
+                if (this.steamid &&
+                    this.apiKey &&
+                    this.w?.ws?.readyState !== this.readyStatesMap.OPEN) {
                     return this.connectWss(this.steamid, this.apiKey, this.tradelink);
-                }.bind(this), t);
-            }
+                }
+            }.bind(this), t);
         });
         this.w.ws.on('open', (e) => {
             console.log(`TradeWebsocket opened`, this.steamid);
@@ -56,9 +63,8 @@ export class TradeWebsocket extends EventEmitter {
                     identity_secret: true,
                 }));
                 this.w.int = setInterval(() => {
-                    if (this.w.ws) {
+                    if (this.w?.ws && this.w.ws.readyState === this.readyStatesMap.OPEN)
                         this.w.ws.send(JSON.stringify({ name: 'ping' }));
-                    }
                 }, 25000);
             }
             else {

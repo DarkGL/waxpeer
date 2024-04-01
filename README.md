@@ -13,14 +13,13 @@ $ npm install waxpeer
 ### Initialization
 
 ```typescript
-import { Waxpeer, TradeWebsocket, WebsiteWebsocket } from 'waxpeer';
+import { Waxpeer, TradeWebsocket } from 'waxpeer';
 
 //API wrapper
 const WP = new Waxpeer(WAXPEER_API);
 //Trade websocket
-const TS = new TradeWebsocket(WAXPEER_API, STEAM_ID, TRADELINK);
-//Website websocket
-const WS = new WebsiteWebsocket(WAXPEER_API, ['add_item', 'remove', 'update_item']);
+const TS = new TradeWebsocket(WAXPEER_API, STEAM_ID, TRADELINK); //auto connect after init
+TS.connectWss(); //connect
 ```
 
 ### Fetch your user data
