@@ -1,6 +1,6 @@
 {
   "name": "waxpeer",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Waxpeer API wrapper for NodeJs",
   "type": "module",
   "main": "dist/index.js",
@@ -43,5 +43,8 @@
     "socket.io-client": "^4.7.5",
     "undici": "^6.10.2",
     "ws": "^8.16.0"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.8"
   }
 }
