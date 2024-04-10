@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'node:events';
 export declare class TradeWebsocket extends EventEmitter {
     private readonly apiKey;
     private readonly steamid;

@@ -1,5 +1,5 @@
-import https from 'https';
-import { EventEmitter } from 'events';
+import https from 'node:https';
+import { EventEmitter } from 'node:events';
 import WebSocket from 'ws';
 export class TradeWebsocket extends EventEmitter {
     apiKey;
@@ -26,17 +26,23 @@ export class TradeWebsocket extends EventEmitter {
         this.connectWss();
     }
     async connectWss() {
-        if (this.w && this.w.ws && this.w.ws.readyState !== this.readyStatesMap.CLOSED)
+        if (this.w?.ws && this.w.ws.readyState !== this.readyStatesMap.CLOSED)
             this.w.ws.terminate();
-        let t = (this.w.tries + 1) * 1e3;
-        const httpsAgent = new https.Agent({ keepAlive: true, ...(this.localAddress ? { localAddress: this.localAddress } : {}) });
-        this.w.ws = new WebSocket('wss://wssex.waxpeer.com', { localAddress: this.localAddress, agent: httpsAgent });
+        const t = (this.w.tries + 1) * 1e3;
+        const httpsAgent = new https.Agent({
+            keepAlive: true,
+            ...(this.localAddress ? { localAddress: this.localAddress } : {}),
+        });
+        this.w.ws = new WebSocket('wss://wssex.waxpeer.com', {
+            localAddress: this.localAddress,
+            agent: httpsAgent,
+        });
         this.w.ws.on('error', (e) => {
             console.log('TradeWebsocket error', e);
         });
         this.w.ws.on('close', (e) => {
             this.w.tries += 1;
-            console.log(`TradeWebsocket closed`, this.steamid);
+            console.log('TradeWebsocket closed', this.steamid);
             setTimeout(function () {
                 if (this.steamid &&
                     this.apiKey &&
@@ -46,7 +52,7 @@ export class TradeWebsocket extends EventEmitter {
             }.bind(this), t);
         });
         this.w.ws.on('open', (e) => {
-            console.log(`TradeWebsocket opened`, this.steamid);
+            console.log('TradeWebsocket opened', this.steamid);
             if (this.steamid) {
                 clearInterval(this.w.int);
                 this.w.ws.send(JSON.stringify({
@@ -73,7 +79,7 @@ export class TradeWebsocket extends EventEmitter {
         });
         this.w.ws.on('message', (e) => {
             try {
-                let jMsg = JSON.parse(e);
+                const jMsg = JSON.parse(e);
                 if (jMsg.name === 'pong')
                     return;
                 if (jMsg.name === 'send-trade') {

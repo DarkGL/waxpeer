@@ -1,4 +1,4 @@
-import { EDopplersPhases, EGameId, EMinExteriors, EWeapon, EWeaponBrand, FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, IBuyOrderHistory, IBuyOrders, ICheckTradeLink, ICheckWssUser, ICreateBuyOrder, IEditBuyOrder, IEditItemsReq, IGetItemsList, IGetSteamItems, IHistory, IListedItem, IMassInfo, IMerchantDepositsHistory, IMerchantInventory, IMerchantInventoryUpate, IMerchantListItem, IMerchantListItemsSteam, IMerchantUser, IMyHistory, IPrices, IPricesDopplers, IReadyTransferTrade, IRemoveAll, IRemoveAllOrders, IRemoveBuyOrder, IResponseEdit, ISetMyKeys, IUser, ListedItem, ListItems, TradesStatus } from './types/waxpeer.js';
+import type { EDopplersPhases, EGameId, EMinExteriors, EWeapon, EWeaponBrand, FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, IBuyOrderHistory, IBuyOrders, ICheckTradeLink, ICheckWssUser, ICreateBuyOrder, IEditBuyOrder, IEditItemsReq, IGetItemsList, IGetSteamItems, IHistory, IListedItem, IMassInfo, IMerchantDepositsHistory, IMerchantInventory, IMerchantInventoryUpate, IMerchantListItem, IMerchantListItemsSteam, IMerchantUser, IMyHistory, IPrices, IPricesDopplers, IReadyTransferTrade, IRemoveAll, IRemoveAllOrders, IRemoveBuyOrder, IResponseEdit, ISetMyKeys, ISetUserSteamToken, IUser, ListedItem, ListItems, TradesStatus } from './types/waxpeer.js';
 export declare class Waxpeer {
     private readonly api;
     readonly baseUrl = "https://api.waxpeer.com";
@@ -13,6 +13,7 @@ export declare class Waxpeer {
     tradeRequestStatus(ids: number | number[] | string | string[]): Promise<TradesStatus>;
     customTradeRequest(ids: number | number[] | string | string[]): Promise<TradesStatus>;
     setMyKeys(steam_api: string): Promise<ISetMyKeys>;
+    setUserSteamToken(token: string): Promise<ISetUserSteamToken>;
     fetchInventory(game?: keyof typeof EGameId): Promise<FetchInventory>;
     getPrices(game?: keyof typeof EGameId, min_price?: number, max_price?: number, search?: string, minified?: 0 | 1, highest_offer?: number, single?: 0 | 1): Promise<IPrices>;
     getPricesDopplers(phase?: keyof typeof EDopplersPhases, exterior?: keyof typeof EMinExteriors, weapon?: keyof typeof EWeapon, minified?: 0 | 1, min_price?: number, max_price?: number, search?: string, single?: 0 | 1): Promise<IPricesDopplers>;
