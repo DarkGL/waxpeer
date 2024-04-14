@@ -100,6 +100,7 @@ export class TradeWebsocket extends EventEmitter {
         this.w.ws.on('message', (e) => {
             try {
                 const jMsg = JSON.parse(e);
+
                 if (jMsg.name === 'pong') return;
                 if (jMsg.name === 'send-trade') {
                     this.emit('send-trade', jMsg.data);
@@ -109,6 +110,9 @@ export class TradeWebsocket extends EventEmitter {
                 }
                 if (jMsg.name === 'accept_withdraw') {
                     this.emit('accept_withdraw', jMsg.data);
+                }
+                if (jMsg.name === 'user_change') {
+                    this.emit('user_change', jMsg.data);
                 }
             } catch {}
         });

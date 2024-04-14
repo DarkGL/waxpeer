@@ -57,10 +57,13 @@ export class Waxpeer {
     setMyKeys(steam_api) {
         return this.get('set-my-steamapi', qs.stringify({ steam_api }));
     }
-    setUserSteamToken(token) {
+    UserSteamToken(token) {
         return this.post('user/steam-token', {
             token: Buffer.from(token).toString('base64'),
         });
+    }
+    steamTrade(tradeid, waxid) {
+        return this.post('steam-trade', { tradeid, waxid });
     }
     fetchInventory(game = 'csgo') {
         return this.get('fetch-my-inventory', qs.stringify({ game }));

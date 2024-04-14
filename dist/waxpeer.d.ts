@@ -13,7 +13,8 @@ export declare class Waxpeer {
     tradeRequestStatus(ids: number | number[] | string | string[]): Promise<TradesStatus>;
     customTradeRequest(ids: number | number[] | string | string[]): Promise<TradesStatus>;
     setMyKeys(steam_api: string): Promise<ISetMyKeys>;
-    setUserSteamToken(token: string): Promise<ISetUserSteamToken>;
+    UserSteamToken(token: string): Promise<ISetUserSteamToken>;
+    steamTrade(tradeid: string, waxid: string): Promise<ISetUserSteamToken>;
     fetchInventory(game?: keyof typeof EGameId): Promise<FetchInventory>;
     getPrices(game?: keyof typeof EGameId, min_price?: number, max_price?: number, search?: string, minified?: 0 | 1, highest_offer?: number, single?: 0 | 1): Promise<IPrices>;
     getPricesDopplers(phase?: keyof typeof EDopplersPhases, exterior?: keyof typeof EMinExteriors, weapon?: keyof typeof EWeapon, minified?: 0 | 1, min_price?: number, max_price?: number, search?: string, single?: 0 | 1): Promise<IPricesDopplers>;

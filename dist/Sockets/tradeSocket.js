@@ -91,6 +91,9 @@ export class TradeWebsocket extends EventEmitter {
                 if (jMsg.name === 'accept_withdraw') {
                     this.emit('accept_withdraw', jMsg.data);
                 }
+                if (jMsg.name === 'user_change') {
+                    this.emit('user_change', jMsg.data);
+                }
             }
             catch { }
         });

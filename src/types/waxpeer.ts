@@ -185,6 +185,11 @@ export interface ISetUserSteamToken {
     msg?: string;
 }
 
+export interface ISetUserSteamToken {
+    success?: boolean;
+    msg?: string;
+}
+
 export interface IBuy {
     success: boolean;
     msg?: string;

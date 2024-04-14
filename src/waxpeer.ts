@@ -356,10 +356,44 @@ export class Waxpeer {
         return this.get('set-my-steamapi', qs.stringify({ steam_api }));
     }
 
-    public setUserSteamToken(token: string): Promise<ISetUserSteamToken> {
+    /**
+     * Due to the steam update, it became mandatory to pass regularly (we recommend sending once an hour and keep 6 hours from the time we receive it) to be online and sell on the marketplace.
+     *
+     * Token should be in base64 format and belong to your account.
+     *
+     * It is recommended to transmit it once an hour to maintain validity, as well as in case of refreshing
+     *
+     * If the "success" parameter in the response is false, you will not get online and most likely you need to update the token and send a new one
+     *
+     * @param token Steam access token in base64 format
+     * @example
+     * // example response:
+     * {
+     *    "success": false,
+     *    "msg": "Need to refresh access token",
+     *    "exp": 1712852259
+     * }
+     */
+    public UserSteamToken(token: string): Promise<ISetUserSteamToken> {
         return this.post('user/steam-token', {
             token: Buffer.from(token).toString('base64'),
         });
+    }
+
+    /**
+     * Due to the Steam update we recommend to send this request and do mobile confirmation only if you receive a successful response (success param is true).
+     * @param tradeid Created Steam trade id
+     * @param waxid Waxpeer uuid trade id (waxid in "send-trade" event OR "costum_id" from another source)
+     * @example
+     * // example response:
+     * {
+     *   "success": false,
+     *   "msg": "No token found"
+     * }
+     *
+     */
+    public steamTrade(tradeid: string, waxid: string): Promise<ISetUserSteamToken> {
+        return this.post('steam-trade', { tradeid, waxid });
     }
 
     /**
