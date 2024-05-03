@@ -1,5 +1,6 @@
 import { Client } from 'undici';
 import qs from 'qs';
+import CacheableLookup from 'cacheable-lookup';
 import type {
     EDopplersPhases,
     EGameId,
@@ -46,11 +47,14 @@ import type {
     TradesStatus,
 } from './types/waxpeer.js';
 
+const cacheable = new CacheableLookup();
+
 export class Waxpeer {
     public readonly baseUrl = 'https://api.waxpeer.com';
     public readonly version = 'v1';
 
     private apiClient: Client;
+    
     constructor(
         private readonly api: string,
         localAddress?: string,
@@ -61,6 +65,7 @@ export class Waxpeer {
             connect: {
                 rejectUnauthorized: false,
                 keepAlive: true,
+                lookup: cacheable.lookup,
             },
         });
     }

@@ -1,5 +1,7 @@
 import { Client } from 'undici';
 import qs from 'qs';
+import CacheableLookup from 'cacheable-lookup';
+const cacheable = new CacheableLookup();
 export class Waxpeer {
     api;
     baseUrl = 'https://api.waxpeer.com';
@@ -13,6 +15,7 @@ export class Waxpeer {
             connect: {
                 rejectUnauthorized: false,
                 keepAlive: true,
+                lookup: cacheable.lookup,
             },
         });
     }

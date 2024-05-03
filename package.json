@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@types/node": "^20.12.7",
+    "cacheable-lookup": "^7.0.0",
     "qs": "^6.12.1",
     "socket.io-client": "^4.7.5",
     "undici": "^6.13.0",
