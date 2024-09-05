@@ -1,4 +1,5 @@
-import type { EGameId } from './waxpeer';
+import type { EGameId } from './waxpeer.js';
+
 export interface WebsiteWebSocketEvents {
     handshake: HandshakeEventPayload;
     new: IInventoryEmit;

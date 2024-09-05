@@ -1,4 +1,4 @@
-import type { EGameId } from './waxpeer';
+import type { EGameId } from './waxpeer.js';
 export interface WebsiteWebSocketEvents {
     handshake: HandshakeEventPayload;
     new: IInventoryEmit;
@@ -86,8 +86,8 @@ export interface TradeWebsocketAcceptWithdrawData {
     partner: string;
 }
 export declare enum WebsiteSocketSubEvents {
-    add_item = "add_item",
-    remove = "remove",
+    add_item = "add_item",// deprecated
+    remove = "remove",// deprecated
     csgo = "csgo",
     rust = "rust",
     dota2 = "dota2",
@@ -253,4 +253,3 @@ export type User = {
     kyc_status: string;
 };
 export {};
-//# sourceMappingURL=sockets.d.ts.map
