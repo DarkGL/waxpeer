@@ -42,9 +42,7 @@ export class TradeWebsocket extends EventEmitter {
             this.tries += 1;
             console.log('TradeWebsocket closed', this.steamid);
             setTimeout(() => {
-                if (this.steamid &&
-                    this.apiKey &&
-                    this.ws?.readyState !== readyStatesMap.OPEN) {
+                if (this.steamid && this.apiKey && this.ws?.readyState !== readyStatesMap.OPEN) {
                     return this.connectWss();
                 }
             }, t);

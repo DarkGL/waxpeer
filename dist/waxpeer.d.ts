@@ -1,8 +1,6 @@
 import type { EDopplersPhases, EGameId, EMinExteriors, EWeapon, EWeaponBrand, FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, IBuyOrderHistory, IBuyOrders, ICheckTradeLink, ICheckWssUser, ICreateBuyOrder, IEditBuyOrder, IEditItemsReq, IGetItemsList, IGetSteamItems, IHistory, IListedItem, IMassInfo, IMerchantDepositsHistory, IMerchantInventory, IMerchantInventoryUpate, IMerchantListItem, IMerchantListItemsSteam, IMerchantUser, IMyHistory, IPrices, IPricesDopplers, IReadyTransferTrade, IRemoveAll, IRemoveAllOrders, IRemoveBuyOrder, IResponseEdit, ISetMyKeys, ISetUserSteamToken, IUser, ListedItem, ListItems, TradesStatus } from './types/waxpeer.js';
 export declare class Waxpeer {
     private readonly api;
-    readonly baseUrl = "https://api.waxpeer.com";
-    readonly version = "v1";
     private apiClient;
     constructor(api: string, localAddress?: string);
     /**

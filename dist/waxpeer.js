@@ -2,14 +2,14 @@ import { Client } from 'undici';
 import qs from 'qs';
 import CacheableLookup from 'cacheable-lookup';
 const cacheable = new CacheableLookup();
+const baseUrl = 'https://api.waxpeer.com';
+const version = 'v1';
 export class Waxpeer {
     api;
-    baseUrl = 'https://api.waxpeer.com';
-    version = 'v1';
     apiClient;
     constructor(api, localAddress) {
         this.api = api;
-        this.apiClient = new Client(this.baseUrl, {
+        this.apiClient = new Client(baseUrl, {
             ...(localAddress ? { localAddress } : {}),
             keepAliveTimeout: 60000,
             // @ts-expect-error https://github.com/szmarczak/cacheable-lookup/issues/79
@@ -17,7 +17,9 @@ export class Waxpeer {
                 rejectUnauthorized: false,
                 keepAlive: true,
                 lookup: cacheable.lookup,
+                noDelay: true,
             },
+            maxRedirections: 5,
         });
     }
     /**
@@ -1169,7 +1171,7 @@ export class Waxpeer {
         return this.post('merchant/deposits', null, qs.stringify({ merchant, steam_id, tx_id }));
     }
     async post(url, body, token) {
-        const path = `/${this.version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
+        const path = `/${version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
         return this.apiClient
             .request({
             method: 'POST',
@@ -1182,7 +1184,7 @@ export class Waxpeer {
             .then((response) => response.body.json());
     }
     async get(url, token) {
-        const path = `/${this.version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
+        const path = `/${version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
         return this.apiClient
             .request({
             method: 'GET',
