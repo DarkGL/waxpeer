@@ -49,24 +49,27 @@ import type {
 
 const cacheable = new CacheableLookup();
 
-export class Waxpeer {
-    public readonly baseUrl = 'https://api.waxpeer.com';
-    public readonly version = 'v1';
+const baseUrl = 'https://api.waxpeer.com';
+const version = 'v1';
 
+export class Waxpeer {
     private apiClient: Client;
-    
+
     constructor(
         private readonly api: string,
         localAddress?: string,
     ) {
-        this.apiClient = new Client(this.baseUrl, {
+        this.apiClient = new Client(baseUrl, {
             ...(localAddress ? { localAddress } : {}),
             keepAliveTimeout: 60000,
+            // @ts-expect-error https://github.com/szmarczak/cacheable-lookup/issues/79
             connect: {
                 rejectUnauthorized: false,
                 keepAlive: true,
                 lookup: cacheable.lookup,
+                noDelay: true,
             },
+            maxRedirections: 5,
         });
     }
 
@@ -174,7 +177,7 @@ export class Waxpeer {
         price: number,
         token: string,
         partner: string,
-        project_id: string = undefined,
+        project_id: string | undefined = undefined,
         game: keyof typeof EGameId = 'csgo',
     ): Promise<IBuy> {
         return this.get(
@@ -446,9 +449,9 @@ export class Waxpeer {
      */
     public getPrices(
         game: keyof typeof EGameId = 'csgo',
-        min_price: number = undefined,
-        max_price: number = undefined,
-        search: string = undefined,
+        min_price: number | undefined = undefined,
+        max_price: number | undefined = undefined,
+        search: string | undefined = undefined,
         minified: 0 | 1 = 1,
         highest_offer = 0,
         single: 0 | 1 = 0,
@@ -502,12 +505,12 @@ export class Waxpeer {
      */
     public getPricesDopplers(
         phase: keyof typeof EDopplersPhases = 'any',
-        exterior: keyof typeof EMinExteriors = undefined,
-        weapon: keyof typeof EWeapon = undefined,
+        exterior: keyof typeof EMinExteriors | undefined = undefined,
+        weapon: keyof typeof EWeapon | undefined = undefined,
         minified: 0 | 1 = 1,
-        min_price: number = undefined,
-        max_price: number = undefined,
-        search: string = undefined,
+        min_price: number | undefined = undefined,
+        max_price: number | undefined = undefined,
+        search: string | undefined = undefined,
         single: 0 | 1 = 0,
     ): Promise<IPricesDopplers> {
         return this.get(
@@ -843,8 +846,8 @@ export class Waxpeer {
      */
     public myPurchases(
         skip = 0,
-        partner: string = undefined,
-        token: string = undefined,
+        partner: string | undefined = undefined,
+        token: string | undefined = undefined,
     ): Promise<IBuyMyHistory> {
         return this.get('history', qs.stringify({ skip, partner, token }));
     }
@@ -957,7 +960,7 @@ export class Waxpeer {
      *   "count": 0
      * }
      */
-    public removeAll(game: keyof typeof EGameId = undefined): Promise<IRemoveAll> {
+    public removeAll(game: keyof typeof EGameId | undefined = undefined): Promise<IRemoveAll> {
         return this.get('remove-all', qs.stringify({ game }));
     }
     /**
@@ -1113,7 +1116,7 @@ export class Waxpeer {
      *
      * @param game (optional) Game from supported games (without game param will remove all)
      */
-    public removeAllOrders(game: keyof typeof EGameId = undefined): Promise<IRemoveAllOrders> {
+    public removeAllOrders(game?: keyof typeof EGameId): Promise<IRemoveAllOrders> {
         return this.get('remove-all-orders', qs.stringify({ game }));
     }
 
@@ -1154,13 +1157,13 @@ export class Waxpeer {
      */
     public getItemsList(
         skip = 0,
-        search: string = undefined,
-        brand: keyof typeof EWeaponBrand = undefined,
+        search: string | undefined = undefined,
+        brand: keyof typeof EWeaponBrand | undefined = undefined,
         order: 'ASC' | 'DESC' = 'DESC',
         order_by: 'price' | 'name' | 'discount' | 'best_deals' = 'price',
-        exterior: keyof typeof EMinExteriors = undefined,
-        max_price: number = undefined,
-        min_price: number = undefined,
+        exterior: keyof typeof EMinExteriors | undefined = undefined,
+        max_price: number | undefined = undefined,
+        min_price: number | undefined = undefined,
         game: keyof typeof EGameId = 'csgo',
     ): Promise<IGetItemsList> {
         return this.get(
@@ -1381,7 +1384,7 @@ export class Waxpeer {
     }
 
     public async post(url: string, body: any, token?: string): Promise<any> {
-        const path = `/${this.version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
+        const path = `/${version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
 
         return this.apiClient
             .request({
@@ -1396,7 +1399,7 @@ export class Waxpeer {
     }
 
     public async get(url: string, token?: string): Promise<any> {
-        const path = `/${this.version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
+        const path = `/${version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
 
         return this.apiClient
             .request({

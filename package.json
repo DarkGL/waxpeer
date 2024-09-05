@@ -1,59 +1,64 @@
 {
   "name": "waxpeer",
-  "version": "1.7.2",
+  "version": "1.8.0",
   "description": "Waxpeer API wrapper for NodeJs",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "npx tsc-watch --onSuccess \"node ./dist/test.js\"",
+    "ci": "npm run format && npm run lint && npm run build && npm run check-exports",
     "build": "npx tsc",
-    "push": "npx tsc && npm publish --access public",
     "format": "npx @biomejs/biome format --write ./src",
-    "lint": "npx @biomejs/biome lint --apply ./src",
-    "prepare": "husky"
+    "lint": "npx @biomejs/biome lint --write ./src",
+    "prepare": "husky",
+    "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
+    "local-release": "changeset version && changeset publish",
+    "prepublishOnly": "npm run ci"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/skylight-ity/waxpeer.git"
+    "url": "git+https://github.com/darkgl/waxpeer.git"
   },
   "keywords": [
     "waxpeer",
     "steam",
-    "p2p"
+    "p2p",
+    "csgo",
+    "cs2",
+    "trading",
+    "bot"
   ],
-  "author": {
-    "name": "Ihtiyor",
-    "email": "ity@waxpeer.com",
-    "url": "https://twitter.com/skylight_ity"
-  },
-  "license": "ISC",
+  "author": "Rafal Wiecek <contact@darkgl.com> (https://x.com/darkgl_)",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/skylight-ity/waxpeer/issues"
+    "url": "https://github.com/darkgl/waxpeer/issues"
   },
-  "homepage": "https://github.com/skylight-ity/waxpeer#readme",
+  "homepage": "https://github.com/darkgl/waxpeer#readme",
   "devDependencies": {
-    "@biomejs/biome": "1.6.4",
-    "@types/qs": "^6.9.14",
+    "@arethetypeswrong/cli": "^0.15.4",
+    "@biomejs/biome": "1.8.3",
+    "@changesets/cli": "^2.27.8",
+    "@types/qs": "^6.9.15",
     "@types/socket.io-client": "^3.0.0",
-    "@types/ws": "^8.5.10",
-    "husky": "^9.0.11",
-    "ts-node": "^10.9.2",
-    "tsc-watch": "^6.2.0",
-    "typescript": "^5.4.5"
+    "@types/ws": "^8.5.12",
+    "husky": "^9.1.5",
+    "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@types/node": "^20.12.7",
+    "@types/node": "^22.5.4",
     "cacheable-lookup": "^7.0.0",
-    "qs": "^6.12.1",
+    "qs": "^6.13.0",
     "socket.io-client": "^4.7.5",
-    "undici": "^6.13.0",
-    "ws": "^8.16.0"
+    "undici": "^6.19.8",
+    "ws": "^8.18.0"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
   },
   "engines": {
-    "node": ">=20.12.2"
-  }
+    "node": ">=20.17.0"
+  },
+  "files": [
+    "dist"
+  ]
 }
