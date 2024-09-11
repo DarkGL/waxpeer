@@ -26,7 +26,16 @@
     "csgo",
     "cs2",
     "trading",
-    "bot"
+    "bot",
+    "marketplace",
+    "trading-api",
+    "peer-to-peer",
+    "rust",
+    "tf2",
+    "team-fortress-2",
+    "csgotrade",
+    "trade-bots",
+    "p2p-trade"
   ],
   "author": "Rafal Wiecek <contact@darkgl.com> (https://x.com/darkgl_)",
   "license": "MIT",
