@@ -7,7 +7,7 @@ Trade websocket documentation [here](https://docs.waxpeer.com/?method=websocket)
 ## Installation
 
 ```sh
-$ npm install waxpeer
+$ npm i @darkgl/waxpeer
 ```
 
 ### Initialization
