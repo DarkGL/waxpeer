@@ -1381,7 +1381,7 @@ export class Waxpeer {
             .request({
                 method: 'POST',
                 path,
-                body: JSON.stringify(body),
+                ...(body ? { body: JSON.stringify(body) } : {}),
                 headers: {
                     'Content-Type': 'application/json',
                 },
