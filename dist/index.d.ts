@@ -1,7 +1,7 @@
 import { Waxpeer } from './waxpeer.js';
 import { TradeWebsocket } from './Sockets/tradeSocket.js';
 import type { EDopplersPhases, EGameId, EMinExteriors, EWeapon, EWeaponBrand, FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, IBuyOrderHistory, IBuyOrders, ICheckTradeLink, ICheckWssUser, ICreateBuyOrder, IEditBuyOrder, IEditItemsReq, IGetItemsList, IGetSteamItems, IHistory, IListedItem, IMassInfo, IMerchantDepositsHistory, IMerchantInventory, IMerchantInventoryUpate, IMerchantListItem, IMerchantListItemsSteam, IMerchantUser, IMyHistory, IPrices, IPricesDopplers, IReadyTransferTrade, IRemoveAll, IRemoveAllOrders, IRemoveBuyOrder, IResponseEdit, ISetMyKeys, ISetUserSteamToken, IUser, ListedItem, ListItems, TradesStatus } from './types/waxpeer.js';
-import type { TradeWebsocketCreateTradeData, TradeWebsocketCancelTradeData } from './types/sockets.js';
+import type { TradeWebsocketCreateTradeData, TradeWebsocketCancelTradeData, TradeWebsocketAcceptWithdrawData } from './types/sockets.js';
 export { Waxpeer, TradeWebsocket };
 export type { EDopplersPhases, EGameId, EMinExteriors, EWeapon, EWeaponBrand, FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, IBuyOrderHistory, IBuyOrders, ICheckTradeLink, ICheckWssUser, ICreateBuyOrder, IEditBuyOrder, IEditItemsReq, IGetItemsList, IGetSteamItems, IHistory, IListedItem, IMassInfo, IMerchantDepositsHistory, IMerchantInventory, IMerchantInventoryUpate, IMerchantListItem, IMerchantListItemsSteam, IMerchantUser, IMyHistory, IPrices, IPricesDopplers, IReadyTransferTrade, IRemoveAll, IRemoveAllOrders, IRemoveBuyOrder, IResponseEdit, ISetMyKeys, ISetUserSteamToken, IUser, ListedItem, ListItems, TradesStatus, };
-export type { TradeWebsocketCreateTradeData, TradeWebsocketCancelTradeData };
+export type { TradeWebsocketCreateTradeData, TradeWebsocketCancelTradeData, TradeWebsocketAcceptWithdrawData, };

@@ -48,6 +48,7 @@ import type {
 import type {
     TradeWebsocketCreateTradeData,
     TradeWebsocketCancelTradeData,
+    TradeWebsocketAcceptWithdrawData,
 } from './types/sockets.js';
 
 export { Waxpeer, TradeWebsocket };
@@ -96,4 +97,8 @@ export type {
     ListItems,
     TradesStatus,
 };
-export type { TradeWebsocketCreateTradeData, TradeWebsocketCancelTradeData };
+export type {
+    TradeWebsocketCreateTradeData,
+    TradeWebsocketCancelTradeData,
+    TradeWebsocketAcceptWithdrawData,
+};

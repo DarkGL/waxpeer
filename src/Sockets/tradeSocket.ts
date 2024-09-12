@@ -1,6 +1,11 @@
 import https from 'node:https';
 import { EventEmitter } from 'node:events';
 import WebSocket from 'ws';
+import type {
+    TradeWebsocketCreateTradeData,
+    TradeWebsocketCancelTradeData,
+    TradeWebsocketAcceptWithdrawData,
+} from '../types/sockets.js';
 
 const readyStatesMap = {
     CONNECTING: 0,
@@ -107,13 +112,13 @@ export class TradeWebsocket extends EventEmitter {
                     case 'pong':
                         return;
                     case 'send-trade':
-                        this.emit('send-trade', msg.data);
+                        this.emit('send-trade', msg.data as TradeWebsocketCreateTradeData);
                         break;
                     case 'cancelTrade':
-                        this.emit('cancelTrade', msg.data);
+                        this.emit('cancelTrade', msg.data as TradeWebsocketCancelTradeData);
                         break;
                     case 'accept_withdraw':
-                        this.emit('accept_withdraw', msg.data);
+                        this.emit('accept_withdraw', msg.data as TradeWebsocketAcceptWithdrawData);
                         break;
                     case 'user_change':
                         this.emit('user_change', msg.data);
