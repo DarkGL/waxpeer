@@ -1,4 +1,4 @@
-import type { EGameId } from './waxpeer.js';
+import type { EGameName } from './waxpeer.js';
 
 export interface WebsiteWebSocketEvents {
     handshake: HandshakeEventPayload;
@@ -130,7 +130,7 @@ export interface ItemChangeEvent {
     image: string;
     steam_price: number;
     item_id: number | string;
-    game?: keyof typeof EGameId;
+    game?: EGameName;
 }
 
 export interface UpdateItemEvent {

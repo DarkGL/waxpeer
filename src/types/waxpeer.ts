@@ -711,3 +711,5 @@ export const EGameId = {
     tf2: 440,
     rust: 252490,
 } as const;
+
+export type EGameName = keyof typeof EGameId;

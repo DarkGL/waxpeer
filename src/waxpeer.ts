@@ -3,7 +3,7 @@ import qs from 'qs';
 import CacheableLookup from 'cacheable-lookup';
 import type {
     EDopplersPhases,
-    EGameId,
+    EGameName,
     EMinExteriors,
     EWeapon,
     EWeaponBrand,
@@ -178,7 +178,7 @@ export class Waxpeer {
         token: string,
         partner: string,
         project_id: string | undefined = undefined,
-        game: keyof typeof EGameId = 'csgo',
+        game: EGameName = 'csgo',
     ): Promise<IBuy> {
         return this.get(
             'buy-one-p2p-name',
@@ -416,7 +416,7 @@ export class Waxpeer {
      *   "total_inventory_count": 120
      * }
      */
-    public fetchInventory(game: keyof typeof EGameId = 'csgo'): Promise<FetchInventory> {
+    public fetchInventory(game: EGameName = 'csgo'): Promise<FetchInventory> {
         return this.get('fetch-my-inventory', qs.stringify({ game }));
     }
 
@@ -448,7 +448,7 @@ export class Waxpeer {
      * }
      */
     public getPrices(
-        game: keyof typeof EGameId = 'csgo',
+        game: EGameName = 'csgo',
         min_price: number | undefined = undefined,
         max_price: number | undefined = undefined,
         search: string | undefined = undefined,
@@ -587,7 +587,7 @@ export class Waxpeer {
      *   }
      * }
      */
-    public massInfo(names: string[], game: keyof typeof EGameId = 'csgo'): Promise<IMassInfo> {
+    public massInfo(names: string[], game: EGameName = 'csgo'): Promise<IMassInfo> {
         return this.post('mass-info', { name: names, sell: 1 }, qs.stringify({ game }));
     }
 
@@ -666,10 +666,7 @@ export class Waxpeer {
      *   "removed": 0
      * }
      */
-    public editItems(
-        items: IEditItemsReq[],
-        game: keyof typeof EGameId = 'csgo',
-    ): Promise<IResponseEdit> {
+    public editItems(items: IEditItemsReq[], game: EGameName = 'csgo'): Promise<IResponseEdit> {
         return this.post(
             'edit-items',
             {
@@ -706,10 +703,7 @@ export class Waxpeer {
      *   ]
      * }
      */
-    public listItemsSteam(
-        items: ListedItem[],
-        game: keyof typeof EGameId = 'csgo',
-    ): Promise<ListItems> {
+    public listItemsSteam(items: ListedItem[], game: EGameName = 'csgo'): Promise<ListItems> {
         return this.post(
             'list-items-steam',
             {
@@ -749,7 +743,7 @@ export class Waxpeer {
      * }
      */
     public myListedItems(
-        game: keyof typeof EGameId = 'csgo',
+        game: EGameName = 'csgo',
     ): Promise<{ success: boolean; items: IListedItem[] }> {
         return this.get('list-items-steam', qs.stringify({ game }));
     }
@@ -783,7 +777,7 @@ export class Waxpeer {
      *   "count": 5,
      * }
      */
-    public getMyInventory(skip = 0, game: keyof typeof EGameId = 'csgo'): Promise<GetMySteamInv> {
+    public getMyInventory(skip = 0, game: EGameName = 'csgo'): Promise<GetMySteamInv> {
         return this.get('get-my-inventory', qs.stringify({ skip, game }));
     }
 
@@ -807,10 +801,7 @@ export class Waxpeer {
      *   ]
      * }
      */
-    public searchItems(
-        names: string[] | string,
-        game: keyof typeof EGameId = 'csgo',
-    ): Promise<GetItems> {
+    public searchItems(names: string[] | string, game: EGameName = 'csgo'): Promise<GetItems> {
         const nameSearch = typeof names === 'object' ? names : [names];
         const searchNames = nameSearch.map((i) => `names=${encodeURIComponent(i)}`).join('&');
         return this.get('search-items-by-name', `game=${game}&${searchNames}`);
@@ -960,7 +951,7 @@ export class Waxpeer {
      *   "count": 0
      * }
      */
-    public removeAll(game: keyof typeof EGameId | undefined = undefined): Promise<IRemoveAll> {
+    public removeAll(game: EGameName | undefined = undefined): Promise<IRemoveAll> {
         return this.get('remove-all', qs.stringify({ game }));
     }
     /**
@@ -1006,7 +997,7 @@ export class Waxpeer {
      */
     public buyOrderHistory(
         skip = 0,
-        game?: keyof typeof EGameId,
+        game?: EGameName,
         sort: 'ASC' | 'DESC' = 'ASC',
     ): Promise<IBuyOrderHistory> {
         return this.get('buy-order-history', qs.stringify({ skip, game, sort }));
@@ -1041,7 +1032,7 @@ export class Waxpeer {
         skip = 0,
         name?: string,
         own: '0' | '1' = '0',
-        game?: keyof typeof EGameId,
+        game?: EGameName,
     ): Promise<IBuyOrders> {
         return this.get('buy-orders', qs.stringify({ skip, name, own, game }));
     }
@@ -1066,7 +1057,7 @@ export class Waxpeer {
         name: string,
         amount: number,
         price: number,
-        game: keyof typeof EGameId = 'csgo',
+        game: EGameName = 'csgo',
     ): Promise<ICreateBuyOrder> {
         return this.post('create-buy-order', null, qs.stringify({ name, amount, price, game }));
     }
@@ -1116,7 +1107,7 @@ export class Waxpeer {
      *
      * @param game (optional) Game from supported games (without game param will remove all)
      */
-    public removeAllOrders(game?: keyof typeof EGameId): Promise<IRemoveAllOrders> {
+    public removeAllOrders(game?: EGameName): Promise<IRemoveAllOrders> {
         return this.get('remove-all-orders', qs.stringify({ game }));
     }
 
@@ -1164,7 +1155,7 @@ export class Waxpeer {
         exterior: keyof typeof EMinExteriors | undefined = undefined,
         max_price: number | undefined = undefined,
         min_price: number | undefined = undefined,
-        game: keyof typeof EGameId = 'csgo',
+        game: EGameName = 'csgo',
     ): Promise<IGetItemsList> {
         return this.get(
             'get-items-list',

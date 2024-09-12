@@ -639,4 +639,5 @@ export declare const EGameId: {
     readonly tf2: 440;
     readonly rust: 252490;
 };
+export type EGameName = keyof typeof EGameId;
 export {};

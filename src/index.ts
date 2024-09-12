@@ -3,6 +3,7 @@ import { TradeWebsocket } from './Sockets/tradeSocket.js';
 import type {
     EDopplersPhases,
     EGameId,
+    EGameName,
     EMinExteriors,
     EWeapon,
     EWeaponBrand,
@@ -55,6 +56,7 @@ export { Waxpeer, TradeWebsocket };
 export type {
     EDopplersPhases,
     EGameId,
+    EGameName,
     EMinExteriors,
     EWeapon,
     EWeaponBrand,

@@ -1,4 +1,4 @@
-import type { EDopplersPhases, EGameId, EMinExteriors, EWeapon, EWeaponBrand, FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, IBuyOrderHistory, IBuyOrders, ICheckTradeLink, ICheckWssUser, ICreateBuyOrder, IEditBuyOrder, IEditItemsReq, IGetItemsList, IGetSteamItems, IHistory, IListedItem, IMassInfo, IMerchantDepositsHistory, IMerchantInventory, IMerchantInventoryUpate, IMerchantListItem, IMerchantListItemsSteam, IMerchantUser, IMyHistory, IPrices, IPricesDopplers, IReadyTransferTrade, IRemoveAll, IRemoveAllOrders, IRemoveBuyOrder, IResponseEdit, ISetMyKeys, ISetUserSteamToken, IUser, ListedItem, ListItems, TradesStatus } from './types/waxpeer.js';
+import type { EDopplersPhases, EGameName, EMinExteriors, EWeapon, EWeaponBrand, FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, IBuyOrderHistory, IBuyOrders, ICheckTradeLink, ICheckWssUser, ICreateBuyOrder, IEditBuyOrder, IEditItemsReq, IGetItemsList, IGetSteamItems, IHistory, IListedItem, IMassInfo, IMerchantDepositsHistory, IMerchantInventory, IMerchantInventoryUpate, IMerchantListItem, IMerchantListItemsSteam, IMerchantUser, IMyHistory, IPrices, IPricesDopplers, IReadyTransferTrade, IRemoveAll, IRemoveAllOrders, IRemoveBuyOrder, IResponseEdit, ISetMyKeys, ISetUserSteamToken, IUser, ListedItem, ListItems, TradesStatus } from './types/waxpeer.js';
 export declare class Waxpeer {
     private readonly api;
     private apiClient;
@@ -91,7 +91,7 @@ export declare class Waxpeer {
      *   "msg": "buy_csgo"
      * }
      */
-    buyItemWithName(name: string, price: number, token: string, partner: string, project_id?: string | undefined, game?: keyof typeof EGameId): Promise<IBuy>;
+    buyItemWithName(name: string, price: number, token: string, partner: string, project_id?: string | undefined, game?: EGameName): Promise<IBuy>;
     /**
      * Buy item using `item_id` and send to specific tradelink - `/buy-one-p2p`
      *
@@ -277,7 +277,7 @@ export declare class Waxpeer {
      *   "total_inventory_count": 120
      * }
      */
-    fetchInventory(game?: keyof typeof EGameId): Promise<FetchInventory>;
+    fetchInventory(game?: EGameName): Promise<FetchInventory>;
     /**
      * Fetch all unique items and their min price and count - `/prices`
      *
@@ -305,7 +305,7 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    getPrices(game?: keyof typeof EGameId, min_price?: number | undefined, max_price?: number | undefined, search?: string | undefined, minified?: 0 | 1, highest_offer?: number, single?: 0 | 1): Promise<IPrices>;
+    getPrices(game?: EGameName, min_price?: number | undefined, max_price?: number | undefined, search?: string | undefined, minified?: 0 | 1, highest_offer?: number, single?: 0 | 1): Promise<IPrices>;
     /**
      * Fetch all dopplers phases by filters - `/prices/dopplers`
      *
@@ -396,7 +396,7 @@ export declare class Waxpeer {
      *   }
      * }
      */
-    massInfo(names: string[], game?: keyof typeof EGameId): Promise<IMassInfo>;
+    massInfo(names: string[], game?: EGameName): Promise<IMassInfo>;
     /**
      * Check provided tradelink - `/check-tradelink`
      * @param tradelink Target tradelink
@@ -466,7 +466,7 @@ export declare class Waxpeer {
      *   "removed": 0
      * }
      */
-    editItems(items: IEditItemsReq[], game?: keyof typeof EGameId): Promise<IResponseEdit>;
+    editItems(items: IEditItemsReq[], game?: EGameName): Promise<IResponseEdit>;
     /**
      * List steam items from inventory - `/list-items-steam`
      *
@@ -494,7 +494,7 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    listItemsSteam(items: ListedItem[], game?: keyof typeof EGameId): Promise<ListItems>;
+    listItemsSteam(items: ListedItem[], game?: EGameName): Promise<ListItems>;
     /**
      * Get listed steam items - `/list-items-steam`
      *
@@ -524,7 +524,7 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    myListedItems(game?: keyof typeof EGameId): Promise<{
+    myListedItems(game?: EGameName): Promise<{
         success: boolean;
         items: IListedItem[];
     }>;
@@ -557,7 +557,7 @@ export declare class Waxpeer {
      *   "count": 5,
      * }
      */
-    getMyInventory(skip?: number, game?: keyof typeof EGameId): Promise<GetMySteamInv>;
+    getMyInventory(skip?: number, game?: EGameName): Promise<GetMySteamInv>;
     /**
      * Search multiple items by name - `/search-items-by-name`
      *
@@ -578,7 +578,7 @@ export declare class Waxpeer {
      *   ]
      * }
      */
-    searchItems(names: string[] | string, game?: keyof typeof EGameId): Promise<GetItems>;
+    searchItems(names: string[] | string, game?: EGameName): Promise<GetItems>;
     /**
      * Get recent purchases - `/history`
      *
@@ -707,7 +707,7 @@ export declare class Waxpeer {
      *   "count": 0
      * }
      */
-    removeAll(game?: keyof typeof EGameId | undefined): Promise<IRemoveAll>;
+    removeAll(game?: EGameName | undefined): Promise<IRemoveAll>;
     /**
      * Remove specified items - `/remove-items`
      *
@@ -747,7 +747,7 @@ export declare class Waxpeer {
      *   "count": 2
      * }
      */
-    buyOrderHistory(skip?: number, game?: keyof typeof EGameId, sort?: 'ASC' | 'DESC'): Promise<IBuyOrderHistory>;
+    buyOrderHistory(skip?: number, game?: EGameName, sort?: 'ASC' | 'DESC'): Promise<IBuyOrderHistory>;
     /**
      * Active buy orders. Sorted by price DESC, if a filter by name is specified - `/buy-orders`
      *
@@ -773,7 +773,7 @@ export declare class Waxpeer {
      *   "count": 0
      * }
      */
-    buyOrders(skip?: number, name?: string, own?: '0' | '1', game?: keyof typeof EGameId): Promise<IBuyOrders>;
+    buyOrders(skip?: number, name?: string, own?: '0' | '1', game?: EGameName): Promise<IBuyOrders>;
     /**
      * Create a buy order to auto purchase items. Currently independent of the p2p status of the user - `/create-buy-order`
      *
@@ -790,7 +790,7 @@ export declare class Waxpeer {
      *   "id": 2007
      * }
      */
-    createBuyOrder(name: string, amount: number, price: number, game?: keyof typeof EGameId): Promise<ICreateBuyOrder>;
+    createBuyOrder(name: string, amount: number, price: number, game?: EGameName): Promise<ICreateBuyOrder>;
     /**
      * Edit buy order - `/edit-buy-order`
      *
@@ -829,7 +829,7 @@ export declare class Waxpeer {
      *
      * @param game (optional) Game from supported games (without game param will remove all)
      */
-    removeAllOrders(game?: keyof typeof EGameId): Promise<IRemoveAllOrders>;
+    removeAllOrders(game?: EGameName): Promise<IRemoveAllOrders>;
     /**
      * Fetches items based on the game you pass as a query - `/get-items-list`
      *
@@ -865,7 +865,7 @@ export declare class Waxpeer {
      *   "count": 100
      * }
      */
-    getItemsList(skip?: number, search?: string | undefined, brand?: keyof typeof EWeaponBrand | undefined, order?: 'ASC' | 'DESC', order_by?: 'price' | 'name' | 'discount' | 'best_deals', exterior?: keyof typeof EMinExteriors | undefined, max_price?: number | undefined, min_price?: number | undefined, game?: keyof typeof EGameId): Promise<IGetItemsList>;
+    getItemsList(skip?: number, search?: string | undefined, brand?: keyof typeof EWeaponBrand | undefined, order?: 'ASC' | 'DESC', order_by?: 'price' | 'name' | 'discount' | 'best_deals', exterior?: keyof typeof EMinExteriors | undefined, max_price?: number | undefined, min_price?: number | undefined, game?: EGameName): Promise<IGetItemsList>;
     /**
      * Fetches recommended item price and other info - `/get-steam-items`
      *
