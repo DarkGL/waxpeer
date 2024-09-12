@@ -1,11 +1,12 @@
 import https from 'node:https';
-import { EventEmitter } from 'node:events';
 import WebSocket from 'ws';
 import type {
     TradeWebsocketCreateTradeData,
     TradeWebsocketCancelTradeData,
     TradeWebsocketAcceptWithdrawData,
+    TradeWebsocketUserChange,
 } from '../types/sockets.js';
+import { TypedEmitter } from 'tiny-typed-emitter';
 
 const readyStatesMap = {
     CONNECTING: 0,
@@ -14,7 +15,14 @@ const readyStatesMap = {
     CLOSED: 3,
 };
 
-export class TradeWebsocket extends EventEmitter {
+interface MessageEvents {
+    'send-trade': (data: TradeWebsocketCreateTradeData) => void;
+    cancelTrade: (data: TradeWebsocketCancelTradeData) => void;
+    accept_withdraw: (data: TradeWebsocketAcceptWithdrawData) => void;
+    user_change: (data: TradeWebsocketUserChange) => void;
+}
+
+export class TradeWebsocket extends TypedEmitter<MessageEvents> {
     private ws: WebSocket | null = null;
     private tries = 0;
     private int: NodeJS.Timeout | null = null;

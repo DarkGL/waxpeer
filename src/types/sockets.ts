@@ -37,6 +37,13 @@ interface UserChangePayload {
     last_login?: string;
 }
 
+export interface TradeWebsocketUserChange {
+    name: 'user_change';
+    data: {
+        can_p2p: boolean;
+    };
+}
+
 export interface TradeWebsocketCreateTrade {
     name: 'send-trade';
     data: TradeWebsocketCreateTradeData;

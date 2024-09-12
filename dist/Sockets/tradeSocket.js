@@ -1,13 +1,13 @@
 import https from 'node:https';
-import { EventEmitter } from 'node:events';
 import WebSocket from 'ws';
+import { TypedEmitter } from 'tiny-typed-emitter';
 const readyStatesMap = {
     CONNECTING: 0,
     OPEN: 1,
     CLOSING: 2,
     CLOSED: 3,
 };
-export class TradeWebsocket extends EventEmitter {
+export class TradeWebsocket extends TypedEmitter {
     apiKey;
     steamid;
     tradelink;
