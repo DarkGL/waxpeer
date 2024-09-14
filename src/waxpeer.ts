@@ -1374,7 +1374,7 @@ export class Waxpeer {
         return this.post('merchant/deposits', null, qs.stringify({ merchant, steam_id, tx_id }));
     }
 
-    public async post(url: string, body: any, token?: string): Promise<any> {
+    public async post<T = any>(url: string, body: any, token?: string): Promise<T> {
         const path = `/${version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
 
         return this.apiClient
@@ -1386,10 +1386,10 @@ export class Waxpeer {
                     'Content-Type': 'application/json',
                 },
             })
-            .then((response) => response.body.json());
+            .then((response) => response.body.json() as Promise<T>);
     }
 
-    public async get(url: string, token?: string): Promise<any> {
+    public async get<T = any>(url: string, token?: string): Promise<T> {
         const path = `/${version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
 
         return this.apiClient
@@ -1397,6 +1397,6 @@ export class Waxpeer {
                 method: 'GET',
                 path,
             })
-            .then((response) => response.body.json());
+            .then((response) => response.body.json() as Promise<T>);
     }
 }

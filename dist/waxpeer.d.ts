@@ -1022,6 +1022,6 @@ export declare class Waxpeer {
      * }
      */
     MerchantDepositsHistory(merchant: string, steam_id?: string, tx_id?: string): Promise<IMerchantDepositsHistory>;
-    post(url: string, body: any, token?: string): Promise<any>;
-    get(url: string, token?: string): Promise<any>;
+    post<T = any>(url: string, body: any, token?: string): Promise<T>;
+    get<T = any>(url: string, token?: string): Promise<T>;
 }

@@ -1,6 +1,6 @@
 {
   "name": "@darkgl/waxpeer",
-  "version": "1.8.5",
+  "version": "1.8.6",
   "description": "Waxpeer API wrapper",
   "type": "module",
   "main": "dist/index.js",
@@ -47,7 +47,7 @@
     "@arethetypeswrong/cli": "^0.16.2",
     "@biomejs/biome": "1.9.0",
     "@changesets/cli": "^2.27.8",
-    "@types/qs": "^6.9.15",
+    "@types/qs": "^6.9.16",
     "@types/socket.io-client": "^3.0.0",
     "@types/ws": "^8.5.12",
     "husky": "^9.1.6",
@@ -55,7 +55,7 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
-    "@types/node": "^22.5.4",
+    "@types/node": "^22.5.5",
     "cacheable-lookup": "^7.0.0",
     "qs": "^6.13.0",
     "socket.io-client": "^4.7.5",
