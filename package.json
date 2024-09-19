@@ -44,8 +44,8 @@
   },
   "homepage": "https://github.com/darkgl/waxpeer#readme",
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.16.2",
-    "@biomejs/biome": "1.9.0",
+    "@arethetypeswrong/cli": "^0.16.4",
+    "@biomejs/biome": "1.9.1",
     "@changesets/cli": "^2.27.8",
     "@types/qs": "^6.9.16",
     "@types/socket.io-client": "^3.0.0",

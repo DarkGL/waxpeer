@@ -120,13 +120,13 @@ export class TradeWebsocket extends TypedEmitter<MessageEvents> {
                     case 'pong':
                         return;
                     case 'send-trade':
-                        this.emit('send-trade', msg.data as TradeWebsocketCreateTradeData);
+                        this.emit('send-trade', msg.data);
                         break;
                     case 'cancelTrade':
-                        this.emit('cancelTrade', msg.data as TradeWebsocketCancelTradeData);
+                        this.emit('cancelTrade', msg.data);
                         break;
                     case 'accept_withdraw':
-                        this.emit('accept_withdraw', msg.data as TradeWebsocketAcceptWithdrawData);
+                        this.emit('accept_withdraw', msg.data);
                         break;
                     case 'user_change':
                         this.emit('user_change', msg.data);
