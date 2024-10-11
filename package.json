@@ -45,21 +45,21 @@
   "homepage": "https://github.com/darkgl/waxpeer#readme",
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.16.4",
-    "@biomejs/biome": "1.9.1",
-    "@changesets/cli": "^2.27.8",
+    "@biomejs/biome": "1.9.3",
+    "@changesets/cli": "^2.27.9",
     "@types/qs": "^6.9.16",
     "@types/socket.io-client": "^3.0.0",
     "@types/ws": "^8.5.12",
     "husky": "^9.1.6",
     "tiny-typed-emitter": "^2.1.0",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@types/node": "^22.5.5",
+    "@types/node": "^22.7.5",
     "cacheable-lookup": "^7.0.0",
     "qs": "^6.13.0",
-    "socket.io-client": "^4.7.5",
-    "undici": "^6.19.8",
+    "socket.io-client": "^4.8.0",
+    "undici": "^6.20.0",
     "ws": "^8.18.0"
   },
   "optionalDependencies": {
