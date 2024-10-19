@@ -175,6 +175,16 @@ export interface User {
     user_id?: string;
 }
 
+export interface ICreateUser {
+    success?: boolean;
+    msg?: string;
+    data?: {
+        api: string;
+        isNew: boolean;
+    };
+    exp?: number;
+}
+
 export interface ISetMyKeys {
     success?: boolean;
     msg?: string;

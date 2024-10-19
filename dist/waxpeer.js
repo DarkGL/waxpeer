@@ -1170,6 +1170,12 @@ export class Waxpeer {
     MerchantDepositsHistory(merchant, steam_id, tx_id) {
         return this.post('merchant/deposits', null, qs.stringify({ merchant, steam_id, tx_id }));
     }
+    // https://api.waxpeer.com/docs/#/User/post_v1_user
+    CreateUser(token) {
+        return this.post('user', {
+            token: Buffer.from(token).toString('base64'),
+        });
+    }
     async post(url, body, token) {
         const path = `/${version}/${url}?api=${this.api}${token ? `&${token}` : ''}`;
         return this.apiClient

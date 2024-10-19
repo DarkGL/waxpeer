@@ -22,6 +22,8 @@ interface MessageEvents {
     user_change: (data: TradeWebsocketUserChange) => void;
 }
 
+const pingPayload = JSON.stringify({ name: 'ping' });
+
 export class TradeWebsocket extends TypedEmitter<MessageEvents> {
     private ws: WebSocket | null = null;
     private tries = 0;
@@ -108,13 +110,13 @@ export class TradeWebsocket extends TypedEmitter<MessageEvents> {
 
             this.int = setInterval(() => {
                 if (this.ws && this.ws.readyState === readyStatesMap.OPEN)
-                    this.ws.send(JSON.stringify({ name: 'ping' }));
+                    this.ws.send(pingPayload);
             }, 25000);
         });
 
-        this.ws.on('message', (e: any) => {
+        this.ws.on('message', (e) => {
             try {
-                const msg = JSON.parse(e);
+                const msg = JSON.parse(e.toString());
 
                 switch (msg.name) {
                     case 'pong':

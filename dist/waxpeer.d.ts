@@ -1,4 +1,4 @@
-import type { EDopplersPhases, EGameName, EMinExteriors, EWeapon, EWeaponBrand, FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, IBuyOrderHistory, IBuyOrders, ICheckTradeLink, ICheckWssUser, ICreateBuyOrder, IEditBuyOrder, IEditItemsReq, IGetItemsList, IGetSteamItems, IHistory, IListedItem, IMassInfo, IMerchantDepositsHistory, IMerchantInventory, IMerchantInventoryUpate, IMerchantListItem, IMerchantListItemsSteam, IMerchantUser, IMyHistory, IPrices, IPricesDopplers, IReadyTransferTrade, IRemoveAll, IRemoveAllOrders, IRemoveBuyOrder, IResponseEdit, ISetMyKeys, ISetUserSteamToken, IUser, ListedItem, ListItems, TradesStatus } from './types/waxpeer.js';
+import type { EDopplersPhases, EGameName, EMinExteriors, EWeapon, EWeaponBrand, FetchInventory, GetItems, GetMySteamInv, IAvailable, IBuy, IBuyMyHistory, IBuyOrderHistory, IBuyOrders, ICheckTradeLink, ICheckWssUser, ICreateBuyOrder, ICreateUser, IEditBuyOrder, IEditItemsReq, IGetItemsList, IGetSteamItems, IHistory, IListedItem, IMassInfo, IMerchantDepositsHistory, IMerchantInventory, IMerchantInventoryUpate, IMerchantListItem, IMerchantListItemsSteam, IMerchantUser, IMyHistory, IPrices, IPricesDopplers, IReadyTransferTrade, IRemoveAll, IRemoveAllOrders, IRemoveBuyOrder, IResponseEdit, ISetMyKeys, ISetUserSteamToken, IUser, ListedItem, ListItems, TradesStatus } from './types/waxpeer.js';
 export declare class Waxpeer {
     private readonly api;
     private apiClient;
@@ -1022,6 +1022,7 @@ export declare class Waxpeer {
      * }
      */
     MerchantDepositsHistory(merchant: string, steam_id?: string, tx_id?: string): Promise<IMerchantDepositsHistory>;
+    CreateUser(token: string): Promise<ICreateUser>;
     post<T = any>(url: string, body: any, token?: string): Promise<T>;
     get<T = any>(url: string, token?: string): Promise<T>;
 }

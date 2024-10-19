@@ -18,6 +18,7 @@ import type {
     ICheckTradeLink,
     ICheckWssUser,
     ICreateBuyOrder,
+    ICreateUser,
     IEditBuyOrder,
     IEditItemsReq,
     IGetItemsList,
@@ -935,8 +936,8 @@ export class Waxpeer {
      *  }
      * }
      */
-    public getProfile(): Promise<IUser> {
-        return this.get('user');
+    public getProfile() {
+        return this.get<IUser>('user');
     }
 
     /**
@@ -968,7 +969,8 @@ export class Waxpeer {
     public removeItems(
         ids: number | number[] | string | string[],
     ): Promise<{ success: boolean; count: number; removed: number[] }> {
-        const removeId: any[] = typeof ids === 'object' ? ids : [ids];
+        const removeId = typeof ids === 'object' ? ids : [ids];
+
         return this.get('remove-items', removeId.map((i) => `id=${i}`).join('&'));
     }
 
@@ -1095,7 +1097,8 @@ export class Waxpeer {
      * }
      */
     public removeBuyOrder(ids: number | number[]): Promise<IRemoveBuyOrder> {
-        const removeIds: any[] = typeof ids === 'object' ? ids : [ids];
+        const removeIds = typeof ids === 'object' ? ids : [ids];
+
         return this.get('remove-buy-order', removeIds.map((i) => `id=${i}`).join('&'));
     }
 
@@ -1372,6 +1375,13 @@ export class Waxpeer {
         tx_id?: string,
     ): Promise<IMerchantDepositsHistory> {
         return this.post('merchant/deposits', null, qs.stringify({ merchant, steam_id, tx_id }));
+    }
+
+    // https://api.waxpeer.com/docs/#/User/post_v1_user
+    public CreateUser(token: string) {
+        return this.post<ICreateUser>('user', {
+            token: Buffer.from(token).toString('base64'),
+        });
     }
 
     public async post<T = any>(url: string, body: any, token?: string): Promise<T> {
