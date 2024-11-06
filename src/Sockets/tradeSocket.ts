@@ -41,9 +41,9 @@ export class TradeWebsocket extends TypedEmitter<MessageEvents> {
     }
 
     async connectWss() {
-        if (this.ws && this.ws.readyState !== readyStatesMap.CLOSED) this.ws.terminate();
-
-        const t = (this.tries + 1) * 1e3;
+        if (this.ws && this.ws.readyState !== readyStatesMap.CLOSED) {
+            this.ws.terminate();
+        }
 
         const httpsAgent = new https.Agent({
             keepAlive: true,
