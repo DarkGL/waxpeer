@@ -45,6 +45,8 @@ export class TradeWebsocket extends TypedEmitter<MessageEvents> {
             this.ws.terminate();
         }
 
+        const t = (this.tries + 1) * 1e3;
+
         const httpsAgent = new https.Agent({
             keepAlive: true,
             ...(this.localAddress ? { localAddress: this.localAddress } : {}),
