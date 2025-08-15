@@ -161,6 +161,7 @@ export interface IUser {
 
 export interface User {
     wallet?: number;
+    total_hold_amount?: number;
     id?: string;
     id64?: string;
     avatar?: string;
