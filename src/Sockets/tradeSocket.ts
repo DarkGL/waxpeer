@@ -20,6 +20,8 @@ interface MessageEvents {
     cancelTrade: (data: TradeWebsocketCancelTradeData) => void;
     accept_withdraw: (data: TradeWebsocketAcceptWithdrawData) => void;
     user_change: (data: TradeWebsocketUserChange) => void;
+    connected: () => void;
+    disconnected: (reason: string) => void;
 }
 
 const pingPayload = JSON.stringify({ name: 'ping' });
@@ -75,6 +77,7 @@ export class TradeWebsocket extends TypedEmitter<MessageEvents> {
                 return;
             }
 
+            this.emit('disconnected', `close code: ${e}`);
             this.tries += 1;
             const delay = Math.min(this.tries * 1000, 30000);
             console.log('TradeWebsocket closed', this.steamid, 'reconnecting in', delay);
@@ -137,6 +140,8 @@ export class TradeWebsocket extends TypedEmitter<MessageEvents> {
                 if (this.ws && this.ws.readyState === readyStatesMap.OPEN)
                     this.ws.send(pingPayload);
             }, 25000);
+
+            this.emit('connected');
         });
 
         this.ws.on('message', (e) => {

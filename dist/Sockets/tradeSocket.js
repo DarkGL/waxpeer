@@ -52,6 +52,7 @@ export class TradeWebsocket extends TypedEmitter {
             if (currentId !== this.connectionId) {
                 return;
             }
+            this.emit('disconnected', `close code: ${e}`);
             this.tries += 1;
             const delay = Math.min(this.tries * 1000, 30000);
             console.log('TradeWebsocket closed', this.steamid, 'reconnecting in', delay);
@@ -98,6 +99,7 @@ export class TradeWebsocket extends TypedEmitter {
                 if (this.ws && this.ws.readyState === readyStatesMap.OPEN)
                     this.ws.send(pingPayload);
             }, 25000);
+            this.emit('connected');
         });
         this.ws.on('message', (e) => {
             try {

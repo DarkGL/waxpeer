@@ -5,6 +5,8 @@ interface MessageEvents {
     cancelTrade: (data: TradeWebsocketCancelTradeData) => void;
     accept_withdraw: (data: TradeWebsocketAcceptWithdrawData) => void;
     user_change: (data: TradeWebsocketUserChange) => void;
+    connected: () => void;
+    disconnected: (reason: string) => void;
 }
 export declare class TradeWebsocket extends TypedEmitter<MessageEvents> {
     private readonly apiKey;
