@@ -712,6 +712,7 @@ export declare class Waxpeer {
      * Remove specified items - `/remove-items`
      *
      * @param ids Either array or one item_id that you want to remove from listing
+     * @param game (optional) Game from supported games (default: csgo)
      * @example
      * // example response:
      * {
@@ -719,7 +720,7 @@ export declare class Waxpeer {
      *   "count": 1
      * }
      */
-    removeItems(ids: number | number[] | string | string[]): Promise<{
+    removeItems(ids: number | number[] | string | string[], game?: EGameName): Promise<{
         success: boolean;
         count: number;
         removed: number[];

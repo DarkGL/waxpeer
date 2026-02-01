@@ -959,6 +959,7 @@ export class Waxpeer {
      * Remove specified items - `/remove-items`
      *
      * @param ids Either array or one item_id that you want to remove from listing
+     * @param game (optional) Game from supported games (default: csgo)
      * @example
      * // example response:
      * {
@@ -968,10 +969,14 @@ export class Waxpeer {
      */
     public removeItems(
         ids: number | number[] | string | string[],
+        game: EGameName = 'csgo',
     ): Promise<{ success: boolean; count: number; removed: number[] }> {
         const removeId = typeof ids === 'object' ? ids : [ids];
 
-        return this.get('remove-items', removeId.map((i) => `id=${i}`).join('&'));
+        return this.get(
+            'remove-items',
+            qs.stringify({ id: removeId, game }, { arrayFormat: 'repeat' }),
+        );
     }
 
     /**
