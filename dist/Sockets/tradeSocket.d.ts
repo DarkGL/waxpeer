@@ -14,6 +14,8 @@ export declare class TradeWebsocket extends TypedEmitter<MessageEvents> {
     private ws;
     private tries;
     private int;
+    private lastPong;
+    private connectionId;
     constructor(apiKey: string, steamid: string, tradelink: string, localAddress: string);
     connectWss(): Promise<void>;
 }

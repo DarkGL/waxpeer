@@ -16,6 +16,8 @@ export class TradeWebsocket extends TypedEmitter {
     ws = null;
     tries = 0;
     int = null;
+    lastPong = Date.now();
+    connectionId = 0;
     constructor(apiKey, steamid, tradelink, localAddress) {
         super();
         this.apiKey = apiKey;
@@ -25,10 +27,11 @@ export class TradeWebsocket extends TypedEmitter {
         this.connectWss();
     }
     async connectWss() {
+        this.connectionId++;
+        const currentId = this.connectionId;
         if (this.ws && this.ws.readyState !== readyStatesMap.CLOSED) {
             this.ws.terminate();
         }
-        const t = (this.tries + 1) * 1e3;
         const httpsAgent = new https.Agent({
             keepAlive: true,
             ...(this.localAddress ? { localAddress: this.localAddress } : {}),
@@ -38,19 +41,30 @@ export class TradeWebsocket extends TypedEmitter {
             agent: httpsAgent,
         });
         this.ws.on('error', (e) => {
-            console.log('TradeWebsocket error', e);
+            console.log('TradeWebsocket error', this.steamid, e);
+            this.ws?.terminate();
         });
         this.ws.on('close', (e) => {
+            if (this.int) {
+                clearInterval(this.int);
+                this.int = null;
+            }
+            if (currentId !== this.connectionId) {
+                return;
+            }
             this.tries += 1;
-            console.log('TradeWebsocket closed', this.steamid);
+            const delay = Math.min(this.tries * 1000, 30000);
+            console.log('TradeWebsocket closed', this.steamid, 'reconnecting in', delay);
             setTimeout(() => {
-                if (this.steamid && this.apiKey && this.ws?.readyState !== readyStatesMap.OPEN) {
-                    return this.connectWss();
+                if (this.steamid && this.apiKey) {
+                    this.connectWss();
                 }
-            }, t);
+            }, delay);
         });
         this.ws.on('open', () => {
             console.log('TradeWebsocket opened', this.steamid);
+            this.tries = 0;
+            this.lastPong = Date.now();
             if (!this.ws) {
                 return;
             }
@@ -76,6 +90,11 @@ export class TradeWebsocket extends TypedEmitter {
                 identity_secret: true,
             }));
             this.int = setInterval(() => {
+                if (Date.now() - this.lastPong > 60000) {
+                    console.log('TradeWebsocket no pong received, reconnecting', this.steamid);
+                    this.ws?.terminate();
+                    return;
+                }
                 if (this.ws && this.ws.readyState === readyStatesMap.OPEN)
                     this.ws.send(pingPayload);
             }, 25000);
@@ -85,6 +104,7 @@ export class TradeWebsocket extends TypedEmitter {
                 const msg = JSON.parse(e.toString());
                 switch (msg.name) {
                     case 'pong':
+                        this.lastPong = Date.now();
                         return;
                     case 'send-trade':
                         this.emit('send-trade', msg.data);
