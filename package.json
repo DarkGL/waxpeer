@@ -1,6 +1,6 @@
 {
   "name": "@darkgl/waxpeer",
-  "version": "1.8.14",
+  "version": "1.8.15",
   "description": "Waxpeer API wrapper",
   "type": "module",
   "main": "dist/index.js",

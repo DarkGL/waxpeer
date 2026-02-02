@@ -130,6 +130,8 @@ export class TradeWebsocket extends TypedEmitter<MessageEvents> {
                 }),
             );
 
+            this.ws.send(pingPayload);
+
             this.int = setInterval(() => {
                 if (Date.now() - this.lastPong > 60000) {
                     console.log('TradeWebsocket no pong received, reconnecting', this.steamid);
