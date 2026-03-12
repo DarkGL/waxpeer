@@ -38,6 +38,7 @@ export class TradeWebsocket extends TypedEmitter<MessageEvents> {
         private readonly steamid: string,
         private readonly tradelink: string,
         private readonly localAddress: string,
+        private readonly source: string = 'custom',
     ) {
         super();
 
@@ -119,13 +120,13 @@ export class TradeWebsocket extends TypedEmitter<MessageEvents> {
                     apiKey: this.apiKey,
                     tradeurl: this.tradelink,
                     identity_secret: true,
-                    source: 'custom',
+                    source: this.source,
                 }),
             );
 
             this.ws.send(
                 JSON.stringify({
-                    source: 'custom',
+                    source: this.source,
                     identity_secret: true,
                 }),
             );

@@ -13,17 +13,19 @@ export class TradeWebsocket extends TypedEmitter {
     steamid;
     tradelink;
     localAddress;
+    source;
     ws = null;
     tries = 0;
     int = null;
     lastPong = Date.now();
     connectionId = 0;
-    constructor(apiKey, steamid, tradelink, localAddress) {
+    constructor(apiKey, steamid, tradelink, localAddress, source = 'custom') {
         super();
         this.apiKey = apiKey;
         this.steamid = steamid;
         this.tradelink = tradelink;
         this.localAddress = localAddress;
+        this.source = source;
         this.connectWss();
     }
     async connectWss() {
@@ -84,10 +86,10 @@ export class TradeWebsocket extends TypedEmitter {
                 apiKey: this.apiKey,
                 tradeurl: this.tradelink,
                 identity_secret: true,
-                source: 'custom',
+                source: this.source,
             }));
             this.ws.send(JSON.stringify({
-                source: 'custom',
+                source: this.source,
                 identity_secret: true,
             }));
             this.ws.send(pingPayload);

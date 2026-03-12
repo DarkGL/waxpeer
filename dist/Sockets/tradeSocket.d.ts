@@ -13,12 +13,13 @@ export declare class TradeWebsocket extends TypedEmitter<MessageEvents> {
     private readonly steamid;
     private readonly tradelink;
     private readonly localAddress;
+    private readonly source;
     private ws;
     private tries;
     private int;
     private lastPong;
     private connectionId;
-    constructor(apiKey: string, steamid: string, tradelink: string, localAddress: string);
+    constructor(apiKey: string, steamid: string, tradelink: string, localAddress: string, source?: string);
     connectWss(): Promise<void>;
 }
 export {};
